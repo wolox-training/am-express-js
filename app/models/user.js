@@ -4,13 +4,15 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'user',
     {
-      first_name: {
+      firstName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        field: 'first_name'
       },
-      last_name: {
+      lastName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        field: 'last_name'
       },
       email: {
         type: DataTypes.STRING,
@@ -21,7 +23,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     },
-    {}
+    {
+      underscored: true
+    }
   );
 
   User.associate = function(models) {
@@ -29,7 +33,31 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.createModel = user => {
-    r eturn User.create(user);
+    return User.create(user).catch(error => {
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        throw errors.emailDuplicated(user.email);
+      } else {
+        throw new Error('Information incomplete or incorrect');
+      }
+    });
   };
+
+  /*
+  User.getUser = user => {
+    return User.findOne({ where: user });
+  };
+
+  User.getByEmail = e => {
+    return User.findOne({ where: { email: e } }).then(user => {
+      if (user) {
+        return user;
+      }
+      else {
+        throw errors.userNotFound(user.email);
+      }
+    })
+  };
+*/
+
   return User;
 };

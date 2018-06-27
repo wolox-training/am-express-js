@@ -1,6 +1,7 @@
-const bcrypt = require('bcryptjs');
-const User = require('../models').user;
-const errors = require('../middlewares/errors.js');
+const bcrypt = require('bcryptjs'),
+  User = require('../models').user,
+  logger = require('../logger'),
+  errors = require('../errors');
 
 const saltRounds = 10;
 
@@ -9,7 +10,7 @@ const emailValid = email => {
   return re.test(email);
 };
 
-const passwordVaild = password => {
+const passwordValid = password => {
   const isAlphanumeric = /^[a-z0-9]+$/i;
   if (isAlphanumeric.test(password) && password.length >= 8) {
     return true;
@@ -20,12 +21,14 @@ const passwordVaild = password => {
 
 exports.signUp = (req, res, next) => {
   if (!emailValid(req.body.email)) {
-    console.log(req.body.email);
-    res.status(600).send();
+    logger.error(`Email: ${req.body.email} invalid.`);
+    // return res.status(600).send();
+    return next(errors.emailNotValid(req.body.email));
   }
-  if (!passwordVaild(req.body.password)) {
-    console.log(req.body.password);
-    res.status(620).send();
+  if (!passwordValid(req.body.password)) {
+    logger.error('Password invalid.');
+    // return res.status(620).send();
+    return next(errors.passwordInvalid());
   }
 
   const user = {
@@ -34,20 +37,18 @@ exports.signUp = (req, res, next) => {
     email: req.body.email,
     password: req.body.password
   };
+
+  logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
   bcrypt
     .hash(user.password, saltRounds)
     .then(hash => {
       user.password = hash;
-      User.createModel(user)
-        .then(auxUser => {
-          res.status(200).send(console.log(auxUser.firstName + auxUser.lastName));
-        })
-        .catch(function(error) {
-          next(errors.handle(error));
-        });
+      return User.createModel(user).then(auxUser => {
+        res.status(200).send({ user: auxUser });
+      });
     })
-    .catch(function(error) {
-      console.log(error);
-      next(errors.handle(error));
+    .catch(error => {
+      logger.error('User creation failed');
+      next(error);
     });
 };
