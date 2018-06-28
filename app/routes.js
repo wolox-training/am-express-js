@@ -1,4 +1,4 @@
-const controller = require('./controllers/user.js');
+const userController = require('./controllers/user');
 
 exports.init = app => {
   // app.get('/endpoint/get/path', [], controller.methodGET);

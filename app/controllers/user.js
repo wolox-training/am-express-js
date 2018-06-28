@@ -22,13 +22,11 @@ const passwordValid = password => {
 exports.signUp = (req, res, next) => {
   if (!emailValid(req.body.email)) {
     logger.error(`Email: ${req.body.email} invalid.`);
-    // return res.status(600).send();
     return next(errors.emailNotValid(req.body.email));
   }
   if (!passwordValid(req.body.password)) {
     logger.error('Password invalid.');
-    // return res.status(620).send();
-    return next(errors.passwordInvalid());
+    return next(errors.passwordInvalid);
   }
 
   const user = {
@@ -44,7 +42,7 @@ exports.signUp = (req, res, next) => {
     .then(hash => {
       user.password = hash;
       return User.createModel(user).then(auxUser => {
-        res.status(200).send({ user: auxUser });
+        res.status(201).send({ user: auxUser });
       });
     })
     .catch(error => {
