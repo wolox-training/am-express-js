@@ -42,5 +42,9 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  User.getUserByEmail = e => {
+    return User.findOne({ where: { email: e } });
+  };
+
   return User;
 };
