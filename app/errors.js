@@ -13,4 +13,4 @@ exports.EMAIL_NOT_VALID = 'email_not_valid';
 exports.emailNotValid = email => internalError(`email not valid: ${email}`, exports.EMAIL_NOT_VALID);
 
 exports.PASSWORD_NOT_VALID = 'password_invalid';
-exports.passwordInvalid = () => internalError('Password invalid', exports.PASSWORD_NOT_VALID);
+exports.passwordInvalid = internalError('Password invalid', exports.PASSWORD_NOT_VALID);

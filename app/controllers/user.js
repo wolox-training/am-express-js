@@ -22,13 +22,11 @@ const passwordValid = password => {
 exports.signUp = (req, res, next) => {
   if (!emailValid(req.body.email)) {
     logger.error(`Email: ${req.body.email} invalid.`);
-    // return res.status(600).send();
     return next(errors.emailNotValid(req.body.email));
   }
   if (!passwordValid(req.body.password)) {
     logger.error('Password invalid.');
-    // return res.status(620).send();
-    return next(errors.passwordInvalid());
+    return next(errors.passwordInvalid);
   }
 
   const user = {
