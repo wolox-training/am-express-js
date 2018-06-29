@@ -2,8 +2,12 @@ const chai = require('chai'),
   dictum = require('dictum.js'),
   server = require('./../app'),
   should = chai.should(),
+  bcrypt = require('bcryptjs'),
+  sessionsManager = require('./../app/services/sessionsManager'),
   errors = require('./../app/errors'),
   User = require('./../app/models').user;
+
+const saltRounds = 10;
 
 describe('/users POST', () => {
   it('Successful', done => {
@@ -103,5 +107,96 @@ describe('/users POST', () => {
         err.response.should.be.json;
       })
       .then(() => done());
+  });
+
+  it('Login Successful', done => {
+    const user = {
+      firstName: 'firstName',
+      lastName: 'lastName',
+      username: 'username',
+      password: 'password',
+      email: 'email1@wolox.com.ar'
+    };
+
+    bcrypt
+      .hash(user.password, saltRounds)
+      .then(hash => {
+        user.password = hash;
+        return User.createModel(user);
+      })
+      .then(u => {
+        chai
+          .request(server)
+          .post('/users/sessions')
+          .send({
+            email: 'email1@wolox.com.ar',
+            password: 'password'
+          })
+          .then(res => {
+            res.should.have.status(200);
+            sessionsManager.HEADER_NAME.should.exist;
+          })
+          .then(() => done());
+      });
+  });
+
+  it('Email invalid', done => {
+    const user = {
+      firstName: 'firstName',
+      lastName: 'lastName',
+      username: 'username',
+      password: 'password',
+      email: 'email1@wolox.com.ar'
+    };
+
+    bcrypt
+      .hash(user.password, saltRounds)
+      .then(hash => {
+        user.password = hash;
+        return User.createModel(user);
+      })
+      .then(u => {
+        chai
+          .request(server)
+          .post('/users/sessions')
+          .send({
+            email: 'email2@wolox.com.ar',
+            password: 'password'
+          })
+          .catch(err => {
+            err.should.have.status(422);
+          })
+          .then(() => done());
+      });
+  });
+
+  it('Password invalid', done => {
+    const user = {
+      firstName: 'firstName',
+      lastName: 'lastName',
+      username: 'username',
+      password: 'password',
+      email: 'email1@wolox.com.ar'
+    };
+
+    bcrypt
+      .hash(user.password, saltRounds)
+      .then(hash => {
+        user.password = hash;
+        return User.createModel(user);
+      })
+      .then(u => {
+        chai
+          .request(server)
+          .post('/users/sessions')
+          .send({
+            email: 'email1@wolox.com.ar',
+            password: 'passworX'
+          })
+          .catch(err => {
+            err.should.have.status(422);
+          })
+          .then(() => done());
+      });
   });
 });

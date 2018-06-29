@@ -38,6 +38,7 @@ exports.signIn = (req, res, next) => {
         }
       });
     } else {
+      logger.error(`Email: ${req.body.email} invalid.`);
       return next(errors.emailNotValid(user.email));
     }
   });
