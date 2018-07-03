@@ -46,5 +46,15 @@ module.exports = (sequelize, DataTypes) => {
     return User.findOne({ where: { email: e } });
   };
 
+  User.getUsers = page => {
+    const users = [];
+    for (var i = page*10-9; i <= page*10; i++) {
+      User.findById(i).then(u => {
+        users.push(u);
+      });
+    }
+    return users;
+  }
+
   return User;
 };

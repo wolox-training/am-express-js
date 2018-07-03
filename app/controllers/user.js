@@ -74,4 +74,13 @@ exports.signUp = (req, res, next) => {
       logger.error('User creation failed');
       next(error);
     });
+
+    exports.listUsers = (req, res, next) => {
+      try {
+        const decoded = sessionsManager.decode(req.header.authorization);
+      } catch (e) {
+        throw new Error('No authorization');
+      }
+      return User.getUsers(req.body.page);
+    }
 };
