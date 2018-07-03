@@ -74,13 +74,23 @@ exports.signUp = (req, res, next) => {
       logger.error('User creation failed');
       next(error);
     });
+};
 
-    exports.listUsers = (req, res, next) => {
-      try {
-        const decoded = sessionsManager.decode(req.header.authorization);
-      } catch (e) {
-        throw new Error('No authorization');
-      }
-      return User.getUsers(req.body.page);
-    }
+exports.listUsers = (req, res, next) => {
+  const auth = req.headers.authorization; // auth is in base64(username:password)  so we need to decode the base64
+  console.log('\n params: page: ');
+  console.log(req.query.page);
+  console.log('\n params: size: ');
+  console.log(req.query);
+  try {
+    const decoded = sessionsManager.decode(auth);
+  } catch (e) {
+    throw new Error('No authorization');
+  }
+  User.getUsers(req.query.page, req.query.limit).then(users => {
+    res.status(200).send(users);
+  }).catch(err => {
+    logger.error('Error looking for users in the database');
+    next(err);
+  });
 };

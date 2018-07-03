@@ -46,15 +46,11 @@ module.exports = (sequelize, DataTypes) => {
     return User.findOne({ where: { email: e } });
   };
 
-  User.getUsers = page => {
-    const users = [];
-    for (var i = page*10-9; i <= page*10; i++) {
-      User.findById(i).then(u => {
-        users.push(u);
-      });
-    }
-    return users;
-  }
+  User.getUsers = (page, size) => {
+    if(page<1) throw new Error('Invalid parameters');
+    const offst = size*page-size;
+    return User.findAll({offset: offst ,limit: size});
+  };
 
   return User;
 };

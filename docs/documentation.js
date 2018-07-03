@@ -32,7 +32,6 @@ dictum.document({
   resource: 'Users'
 });
 
-
 dictum.document({
   description: 'Login for users who already signed up',
   endpoint: '/users/sessions',
