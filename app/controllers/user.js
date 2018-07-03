@@ -42,7 +42,7 @@ exports.signUp = (req, res, next) => {
     .then(hash => {
       user.password = hash;
       return User.createModel(user).then(auxUser => {
-        res.status(200).send({ user: auxUser });
+        res.status(201).send({ user: auxUser });
       });
     })
     .catch(error => {
