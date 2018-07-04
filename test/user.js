@@ -249,9 +249,10 @@ describe('/users POST', () => {
               .request(server)
               .post('/users?page=1&limit=4')
               .send();
-            console.log('daskdfhasjkfhajkfhjkasfhkjashfjksfhjksdfhkj');
           })
-          .then(() => done());
+          .then(res => {
+            res.should.have.status(200);
+          });
       });
   });
 });
