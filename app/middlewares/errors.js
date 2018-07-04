@@ -7,7 +7,8 @@ const statusCodes = {
   [errors.DEFAULT_ERROR]: 500,
   [errors.EMAIL_DUPLICATED]: 422,
   [errors.EMAIL_NOT_VALID]: 422,
-  [errors.PASSWORD_NOT_VALID]: 422
+  [errors.PASSWORD_NOT_VALID]: 422,
+  [errors.PARAMETERS_INVALID]: 400
 };
 
 exports.handle = (error, req, res, next) => {

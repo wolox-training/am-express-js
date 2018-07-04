@@ -1,11 +1,14 @@
 const chai = require('chai'),
-  dictum = require('dictum.js'),
+  assert = require('chai').assert,
   server = require('./../app'),
-  User = require('./../app/models').user,
-  should = chai.should();
+  should = chai.should(),
+  errors = require('./../app/errors'),
+  User = require('./../app/models').user;
+
+const saltRounds = 10;
 
 describe('/users POST', () => {
-  it('Successful', done => {
+  it('it creates a new user', done => {
     chai
       .request(server)
       .post('/users')
@@ -18,8 +21,13 @@ describe('/users POST', () => {
       })
       .then(res => {
         res.should.have.status(201);
-      })
-      .then(() => done());
+        res.body.should.have.property('user');
+        res.body.user.should.have.property('created_at');
+        User.findAll().then(u => {
+          assert.isNotEmpty(u, 'Se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because email is in use', done => {
@@ -45,8 +53,11 @@ describe('/users POST', () => {
         err.response.should.be.json;
         err.response.body.should.have.property('message');
         err.response.body.should.have.property('internal_code');
-      })
-      .then(() => done());
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because email is invalid', done => {
@@ -65,8 +76,11 @@ describe('/users POST', () => {
         err.response.should.be.json;
         err.response.body.should.have.property('message');
         err.response.body.should.have.property('internal_code');
-      })
-      .then(() => done());
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because password is invalid', done => {
@@ -85,8 +99,11 @@ describe('/users POST', () => {
         err.response.should.be.json;
         err.response.body.should.have.property('message');
         err.response.body.should.have.property('internal_code');
-      })
-      .then(() => done());
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because not enough parameters', done => {
@@ -99,8 +116,14 @@ describe('/users POST', () => {
         email: 'email1@wolox.com.ar'
       })
       .catch(err => {
+        err.should.have.status(400);
         err.response.should.be.json;
-      })
-      .then(() => done());
+        err.response.body.should.have.property('message');
+        err.response.body.should.have.property('internal_code');
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 });

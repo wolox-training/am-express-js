@@ -14,3 +14,6 @@ exports.emailNotValid = email => internalError(`email not valid: ${email}`, expo
 
 exports.PASSWORD_NOT_VALID = 'password_invalid';
 exports.passwordInvalid = internalError('Password invalid', exports.PASSWORD_NOT_VALID);
+
+exports.PARAMETERS_INVALID = 'parameters_invalid';
+exports.parametersInvalid = internalError('Parameters incomplete or invalid', exports.PARAMETERS_INVALID);
