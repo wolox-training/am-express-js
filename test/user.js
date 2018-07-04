@@ -42,7 +42,7 @@ describe('/users POST', () => {
       .request(server)
       .post('/users')
       .send({
-        firstName: 'firstName',
+        firstName: 'wrongName',
         lastName: 'lastName',
         username: 'username',
         password: 'password',
@@ -53,8 +53,8 @@ describe('/users POST', () => {
         err.response.should.be.json;
         err.response.body.should.have.property('message');
         err.response.body.should.have.property('internal_code');
-        User.findAll().then(u => {
-          assert.isEmpty(u, 'No se creo un usuario');
+        User.findOne({ where: { firstName: 'wrongName' } }).then(u => {
+          assert.isNull(u, 'No se creo un usuario');
         });
         done();
       });
