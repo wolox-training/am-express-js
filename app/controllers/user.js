@@ -78,19 +78,19 @@ exports.signUp = (req, res, next) => {
 
 exports.listUsers = (req, res, next) => {
   const auth = req.headers.authorization; // auth is in base64(username:password)  so we need to decode the base64
-  console.log('\n params: page: ');
-  console.log(req.query.page);
-  console.log('\n params: size: ');
-  console.log(req.query);
   try {
     const decoded = sessionsManager.decode(auth);
   } catch (e) {
     throw new Error('No authorization');
   }
-  User.getUsers(req.query.page, req.query.limit).then(users => {
-    res.status(200).send(users);
-  }).catch(err => {
-    logger.error('Error looking for users in the database');
-    next(err);
-  });
+  User.getUsers(req.query.page, req.query.limit)
+    .then(users => {
+      console.log('Bien');
+      res.status(200).send(users);
+    })
+    .catch(err => {
+      console.log('XD');
+      logger.error('Error looking for users in the database');
+      next(err);
+    });
 };

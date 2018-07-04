@@ -199,4 +199,45 @@ describe('/users POST', () => {
           .then(() => done());
       });
   });
+
+  it('User list Successful', done => {
+    const user = {
+      firstName: 'firstName',
+      lastName: 'lastName',
+      username: 'username',
+      password: 'password',
+      email: 'email1@wolox.com.ar'
+    };
+
+    bcrypt
+      .hash(user.password, saltRounds)
+      .then(hash => {
+        user.password = hash;
+        return User.createModel(user);
+      })
+      .then(u => {
+        chai
+          .request(server)
+          .post('/users/sessions')
+          .send({
+            email: 'email1@wolox.com.ar',
+            password: 'password'
+          })
+          .then(res => {
+            res.should.have.status(200);
+            sessionsManager.HEADER_NAME.should.exist;
+          })
+          .then(auth => {
+            chai
+              .request(server)
+              .post('/users?page=1&limit=4')
+              .send();
+          })
+          .then(res => {
+            console.log(res.status);
+            res.should.have.status(200);
+          })
+          .then(() => done());
+      });
+  });
 });

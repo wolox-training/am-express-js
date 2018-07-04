@@ -47,9 +47,9 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.getUsers = (page, size) => {
-    if(page<1) throw new Error('Invalid parameters');
-    const offst = size*page-size;
-    return User.findAll({offset: offst ,limit: size});
+    if (page < 1) throw new Error('Invalid parameters');
+    const offst = size * page - size;
+    return User.findAll({ offset: offst, limit: size });
   };
 
   return User;
