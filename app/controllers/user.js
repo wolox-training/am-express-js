@@ -13,11 +13,7 @@ const emailValid = email => {
 
 const passwordValid = password => {
   const isAlphanumeric = /^[a-z0-9]+$/i;
-  if (isAlphanumeric.test(password) && password.length >= 8) {
-    return true;
-  } else {
-    return false;
-  }
+  return isAlphanumeric.test(password) && password.length >= 8;
 };
 
 exports.signIn = (req, res, next) => {

@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       if (error.name === 'SequelizeUniqueConstraintError') {
         throw errors.emailDuplicated(user.email);
       } else {
-        throw new Error('Information incomplete or incorrect');
+        throw errors.invalidParameters;
       }
     });
   };
