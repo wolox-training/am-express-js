@@ -1,5 +1,5 @@
 const chai = require('chai'),
-  dictum = require('dictum.js'),
+  assert = require('chai').assert,
   server = require('./../app'),
   should = chai.should(),
   bcrypt = require('bcryptjs'),
@@ -10,7 +10,7 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 describe('/users POST', () => {
-  it('Successful', done => {
+  it('it creates a new user', done => {
     chai
       .request(server)
       .post('/users')
@@ -23,8 +23,14 @@ describe('/users POST', () => {
       })
       .then(res => {
         res.should.have.status(201);
-      })
-      .then(() => done());
+        res.body.should.have.property('user');
+        console.log(res.body.user);
+        res.body.user.should.have.property('created_at');
+        User.findAll().then(u => {
+          assert.isNotEmpty(u, 'Se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because email is in use', done => {
@@ -50,8 +56,11 @@ describe('/users POST', () => {
         err.response.should.be.json;
         err.response.body.should.have.property('message');
         err.response.body.should.have.property('internal_code');
-      })
-      .then(() => done());
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because email is invalid', done => {
@@ -70,8 +79,11 @@ describe('/users POST', () => {
         err.response.should.be.json;
         err.response.body.should.have.property('message');
         err.response.body.should.have.property('internal_code');
-      })
-      .then(() => done());
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because password is invalid', done => {
@@ -90,8 +102,11 @@ describe('/users POST', () => {
         err.response.should.be.json;
         err.response.body.should.have.property('message');
         err.response.body.should.have.property('internal_code');
-      })
-      .then(() => done());
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('should fail because not enough parameters', done => {
@@ -104,9 +119,15 @@ describe('/users POST', () => {
         email: 'email1@wolox.com.ar'
       })
       .catch(err => {
+        err.should.have.status(400);
         err.response.should.be.json;
-      })
-      .then(() => done());
+        err.response.body.should.have.property('message');
+        err.response.body.should.have.property('internal_code');
+        User.findAll().then(u => {
+          assert.isEmpty(u, 'No se creo un usuario');
+        });
+        done();
+      });
   });
 
   it('Login Successful', done => {
@@ -135,8 +156,8 @@ describe('/users POST', () => {
           .then(res => {
             res.should.have.status(200);
             sessionsManager.HEADER_NAME.should.exist;
-          })
-          .then(() => done());
+            done();
+          });
       });
   });
 
@@ -165,8 +186,8 @@ describe('/users POST', () => {
           })
           .catch(err => {
             err.should.have.status(422);
-          })
-          .then(() => done());
+            done();
+          });
       });
   });
 
@@ -195,8 +216,8 @@ describe('/users POST', () => {
           })
           .catch(err => {
             err.should.have.status(422);
-          })
-          .then(() => done());
+            done();
+          });
       });
   });
 });
