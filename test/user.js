@@ -10,6 +10,73 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 describe('users controller', () => {
+  describe('/users GET', () => {
+    it('lists users correctly', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          chai
+            .request(server)
+            .post('/users/sessions')
+            .send({
+              email: 'email1@wolox.com.ar',
+              password: 'password'
+            })
+            .then(auth => {
+              chai
+                .request(server)
+                .get('/users?page=1&limit=3')
+                .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                .then(res => {
+                  res.should.have.status(200);
+                  res.should.be.json;
+                  dictum.chai(res);
+                  done();
+                });
+            });
+        });
+    });
+    it('rejects not logged in user', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(auth => {
+          chai
+            .request(server)
+            .get('/users?page=1&limit=3')
+            .catch(err => {
+              err.should.have.status(403);
+              err.response.should.be.json;
+              err.response.body.should.have.property('message');
+              err.response.body.should.have.property('internal_code');
+              done();
+            });
+        });
+    });
+  });
   describe('/users/sessions POST', () => {
     it('Login Successful', done => {
       const user = {
@@ -68,6 +135,9 @@ describe('users controller', () => {
             })
             .catch(err => {
               err.should.have.status(400);
+              err.response.should.be.json;
+              err.response.body.should.have.property('message');
+              err.response.body.should.have.property('internal_code');
               done();
             });
         });
