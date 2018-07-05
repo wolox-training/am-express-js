@@ -15,5 +15,11 @@ exports.emailNotValid = email => internalError(`email not valid: ${email}`, expo
 exports.PASSWORD_NOT_VALID = 'password_invalid';
 exports.passwordInvalid = internalError('Password invalid', exports.PASSWORD_NOT_VALID);
 
-exports.INVALID_PARAMETERS = 'invalid_parameters';
-exports.invalidParameters = internalError('Parameters are incomplete or invalid', exports.INVALID_PARAMETERS);
+exports.PARAMETERS_INVALID = 'parameters_invalid';
+exports.parametersInvalid = internalError('Parameters incomplete or invalid', exports.PARAMETERS_INVALID);
+
+exports.INCORRECT_CREDENTIALS = 'Incorrect credentials';
+exports.incorrectCredentials = internalError(
+  'The credentials are unrecognized',
+  exports.INCORRECT_CREDENTIALS
+);
