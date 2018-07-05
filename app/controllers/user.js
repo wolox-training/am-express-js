@@ -17,25 +17,21 @@ const passwordValid = password => {
 };
 
 exports.signIn = (req, res, next) => {
-  const user = {
-    email: req.body.email,
-    password: req.body.password
-  };
-  return User.getUserByEmail(req.body.email).then(u => {
-    if (u) {
-      bcrypt.compare(user.password, u.password).then(isValid => {
+  return User.getUserByEmail(req.body.email).then(user => {
+    if (user) {
+      bcrypt.compare(req.body.password, user.password).then(isValid => {
         if (isValid) {
-          const auth = sessionsManager.encode({ email: u.email });
+          const auth = sessionsManager.encode({ email: user.email });
           res.status(200);
           res.set(sessionsManager.HEADER_NAME, auth);
-          res.send(u);
+          res.send(user);
         } else {
-          return next(errors.passwordInvalid);
+          return next(errors.incorrectCredentials);
         }
       });
     } else {
-      logger.error(`Email: ${req.body.email} invalid.`);
-      return next(errors.emailNotValid(user.email));
+      logger.error(`Email: ${req.body.email} not found.`);
+      return next(errors.incorrectCredentials);
     }
   });
 };
