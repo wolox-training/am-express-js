@@ -73,15 +73,13 @@ exports.listUsers = (req, res, next) => {
   try {
     const decoded = sessionsManager.decode(auth);
   } catch (e) {
-    throw new Error('No authorization');
+    throw errors.unauthorizedNoLogin;
   }
   User.getUsers(req.query.page, req.query.limit)
     .then(users => {
-      console.log('Bien');
       res.status(200).send(users);
     })
     .catch(err => {
-      console.log('XD');
       logger.error('Error looking for users in the database');
       next(err);
     });

@@ -23,3 +23,6 @@ exports.incorrectCredentials = internalError(
   'The credentials are unrecognized',
   exports.INCORRECT_CREDENTIALS
 );
+
+exports.UNAUTHORIZED_NO_LOGIN = 'Not logged in';
+exports.unauthorizedNoLogin = internalError('Must be logged in to access', exports.UNAUTHORIZED_NO_LOGIN);
