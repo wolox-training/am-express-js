@@ -16,6 +16,8 @@ const passwordValid = password => {
   return isAlphanumeric.test(password) && password.length >= 8;
 };
 
+exports.adminSignUp = (req, res, next) => {};
+
 exports.signIn = (req, res, next) => {
   return User.getUserByEmail(req.body.email).then(user => {
     if (user) {
