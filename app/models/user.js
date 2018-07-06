@@ -46,10 +46,9 @@ module.exports = (sequelize, DataTypes) => {
     return User.findOne({ where: { email: e } });
   };
 
-  User.getUsers = (page, size) => {
-    if (page < 1) throw errors.parametersInvalid;
-    const offst = size * page - size;
-    return User.findAll({ offset: offst, limit: size });
+  User.getUsers = (page = 1, size = 10) => {
+    const offset = size * page - size;
+    return User.findAll({ offset, limit: size });
   };
 
   return User;
