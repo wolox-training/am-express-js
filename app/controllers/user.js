@@ -16,7 +16,57 @@ const passwordValid = password => {
   return isAlphanumeric.test(password) && password.length >= 8;
 };
 
-exports.adminSignUp = (req, res, next) => {};
+exports.adminSignUp = (req, res, next) => {
+  User.getUserByEmail(req.body.email).then(existingUser => {
+    if (existingUser) {
+      bcrypt.compare(req.body.password, existingUser.password).then(isValid => {
+        if (isValid) {
+          User.update({ admin: true }, { returning: true, where: { email: req.body.email } })
+            .then(() => {
+              res.status(200);
+              res.send(existingUser);
+            })
+            .catch(err => {
+              next(err);
+            });
+        } else {
+          return next(errors.incorrectCredentials);
+        }
+      });
+    } else {
+      if (!emailValid(req.body.email)) {
+        logger.error(`Email: ${req.body.email} invalid.`);
+        return next(errors.emailNotValid(req.body.email));
+      }
+      if (!passwordValid(req.body.password)) {
+        logger.error('Password invalid.');
+        return next(errors.passwordInvalid);
+      }
+
+      const newAdmin = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password,
+        admin: true
+      };
+
+      logger.info(`All validations passed, going to create the newAdmin: ${JSON.stringify(newAdmin)}`);
+      bcrypt
+        .hash(newAdmin.password, saltRounds)
+        .then(hash => {
+          newAdmin.password = hash;
+          return User.createModel(newAdmin).then(auxUser => {
+            res.status(201).send({ newAdmin: auxUser });
+          });
+        })
+        .catch(error => {
+          logger.error('User creation failed');
+          next(error);
+        });
+    }
+  });
+};
 
 exports.signIn = (req, res, next) => {
   return User.getUserByEmail(req.body.email).then(user => {
@@ -52,7 +102,8 @@ exports.signUp = (req, res, next) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    admin: false
   };
 
   logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
