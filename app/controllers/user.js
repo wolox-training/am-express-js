@@ -74,10 +74,10 @@ exports.listUsers = (req, res, next) => {
     User.getUsers(req.query.page, req.query.limit)
       .then(users => {
         res.status(200).send({
-          users: users,
-          page: req.query.page ? req.query.page:1,
-          totalPages: Math.ceil(total/(req.query.limit ? req.query.limit:10)),
-          totalUsers: total,
+          users,
+          page: req.query.page ? req.query.page : 1,
+          totalPages: Math.ceil(total / (req.query.limit ? req.query.limit : 10)),
+          totalUsers: total
         });
       })
       .catch(err => {
