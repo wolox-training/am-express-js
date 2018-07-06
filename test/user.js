@@ -36,7 +36,7 @@ describe('users controller', () => {
             })
             .then(res => {
               res.should.have.status(200);
-              sessionsManager.HEADER_NAME.should.exist;
+              res.headers[sessionsManager.HEADER_NAME].should.exist;
               dictum.chai(res, 'User has logged in');
               done();
             });
