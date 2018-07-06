@@ -69,18 +69,20 @@ exports.signUp = (req, res, next) => {
 };
 
 exports.listUsers = (req, res, next) => {
-  const auth = req.headers.authorization; // auth is in base64(username:password)  so we need to decode the base64
-  try {
-    const decoded = sessionsManager.decode(auth);
-  } catch (e) {
-    throw errors.unauthorizedNoLogin;
-  }
-  User.getUsers(req.query.page, req.query.limit)
-    .then(users => {
-      res.status(200).send(users);
-    })
-    .catch(err => {
-      logger.error('Error looking for users in the database');
-      next(err);
-    });
+  User.count().then(total => {
+    if (req.query.page < 1 || req.query.limit < 1) return next(errors.parametersInvalid);
+    User.getUsers(req.query.page, req.query.limit)
+      .then(users => {
+        res.status(200).send({
+          users: users,
+          page: req.query.page ? req.query.page:1,
+          totalPages: Math.ceil(total/(req.query.limit ? req.query.limit:10)),
+          totalUsers: total,
+        });
+      })
+      .catch(err => {
+        logger.error('Error looking for users in the database');
+        next(err);
+      });
+  });
 };
