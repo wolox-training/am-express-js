@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.getUsers = (page = 1, size = 10) => {
     const offset = size * page - size;
-    return User.findAll({ offset, limit: size });
+    return User.findAndCountAll({ offset, limit: size });
   };
 
   return User;
