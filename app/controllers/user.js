@@ -24,7 +24,7 @@ exports.adminSignUp = (req, res, next) => {
           User.update({ admin: true }, { returning: true, where: { email: req.body.email } })
             .then(() => {
               res.status(200);
-              res.send(existingUser);
+              res.send({ newAdmin: existingUser });
             })
             .catch(err => {
               next(err);
@@ -61,7 +61,7 @@ exports.adminSignUp = (req, res, next) => {
           });
         })
         .catch(error => {
-          logger.error('User creation failed');
+          logger.error('Admin creation failed');
           next(error);
         });
     }
