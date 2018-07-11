@@ -8,7 +8,6 @@ const User = require('../models').user,
 
 exports.listAlbums = (req, res, next) => {
   const url = `${config.common.albumList}/albums`;
-  console.log(`url ${url}`);
   return axios.get(url).then(json => {
     logger.info('User requested albums and received album list');
     res.status(200).send(json.data);

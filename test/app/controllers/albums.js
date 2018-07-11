@@ -51,7 +51,6 @@ describe('albums controller', () => {
                 .get('/albums')
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .then(res => {
-                  console.log(res.body);
                   res.should.have.status(200);
                   res.body.should.have.lengthOf(1);
                   res.should.be.json;
