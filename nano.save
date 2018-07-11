@@ -1,0 +1,513 @@
+  PID TTY STAT TIME COMMAND
+    1 ?  Ss 0:00 /sbin/init splash
+    2 ?  S 0:00 [kthreadd]
+    3 ?  S 0:00 [ksoftirqd/0]
+    5 ?  S< 0:00 [kworker/0:0H]
+    7 ?  S 0:02 [rcu_sched]
+    8 ?  S 0:00 [rcu_bh]
+    9 ?  S 0:00 [migration/0]
+   10 ?  S 0:00 [watchdog/0]
+   11 ?  S 0:00 [watchdog/1]
+   12 ?  S 0:00 [migration/1]
+   13 ?  S 0:00 [ksoftirqd/1]
+   15 ?  S< 0:00 [kworker/1:0H]
+   16 ?  S 0:00 [watchdog/2]
+   17 ?  S 0:00 [migration/2]
+   18 ?  S 0:00 [ksoftirqd/2]
+   20 ?  S< 0:00 [kworker/2:0H]
+   21 ?  S 0:00 [watchdog/3]
+   22 ?  S 0:00 [migration/3]
+   23 ?  S 0:00 [ksoftirqd/3]
+   25 ?  S< 0:00 [kworker/3:0H]
+   26 ?  S 0:00 [watchdog/4]
+   27 ?  S 0:00 [migration/4]
+   28 ?  S 0:00 [ksoftirqd/4]
+   30 ?  S< 0:00 [kworker/4:0H]
+   31 ?  S 0:00 [watchdog/5]
+   32 ?  S 0:00 [migration/5]
+   33 ?  S 0:00 [ksoftirqd/5]
+   34 ?  S 0:00 [kworker/5:0]
+   35 ?  S< 0:00 [kworker/5:0H]
+   36 ?  S 0:00 [watchdog/6]
+   37 ?  S 0:00 [migration/6]
+   38 ?  S 0:00 [ksoftirqd/6]
+   40 ?  S< 0:00 [kworker/6:0H]
+   41 ?  S 0:00 [watchdog/7]
+   42 ?  S 0:00 [migration/7]
+   43 ?  S 0:00 [ksoftirqd/7]
+   45 ?  S< 0:00 [kworker/7:0H]
+   46 ?  S 0:00 [kdevtmpfs]
+   47 ?  S< 0:00 [netns]
+   48 ?  S< 0:00 [perf]
+   49 ?  S 0:00 [khungtaskd]
+   50 ?  S< 0:00 [writeback]
+   51 ?  SN 0:00 [ksmd]
+   52 ?  SN 0:00 [khugepaged]
+   53 ?  S< 0:00 [crypto]
+   54 ?  S< 0:00 [kintegrityd]
+   55 ?  S< 0:00 [bioset]
+   56 ?  S< 0:00 [kblockd]
+   57 ?  S< 0:00 [ata_sff]
+   58 ?  S< 0:00 [md]
+   59 ?  S< 0:00 [devfreq_wq]
+   63 ?  S 0:00 [kswapd0]
+   64 ?  S< 0:00 [vmstat]
+   65 ?  S 0:00 [fsnotify_mark]
+   66 ?  S 0:00 [ecryptfs-kthrea]
+   82 ?  S< 0:00 [kthrotld]
+   83 ?  S< 0:00 [acpi_thermal_pm]
+   84 ?  S< 0:00 [bioset]
+   85 ?  S< 0:00 [bioset]
+   86 ?  S< 0:00 [bioset]
+   87 ?  S< 0:00 [bioset]
+   88 ?  S< 0:00 [bioset]
+   89 ?  S< 0:00 [bioset]
+   91 ?  S< 0:00 [bioset]
+   92 ?  S< 0:00 [bioset]
+   97 ?  S< 0:00 [ipv6_addrconf]
+  111 ?  S< 0:00 [deferwq]
+  112 ?  S< 0:00 [charger_manager]
+  122 ?  S 0:00 [kworker/5:1]
+  160 ?  S< 0:00 [kpsmoused]
+  162 ?  S 0:00 [scsi_eh_0]
+  163 ?  S< 0:00 [scsi_tmf_0]
+  164 ?  S 0:00 [scsi_eh_1]
+  165 ?  S< 0:00 [scsi_tmf_1]
+  166 ?  S 0:00 [scsi_eh_2]
+  167 ?  S< 0:00 [scsi_tmf_2]
+  168 ?  S 0:00 [scsi_eh_3]
+  169 ?  S< 0:00 [scsi_tmf_3]
+  170 ?  S 0:00 [scsi_eh_4]
+  171 ?  S< 0:00 [scsi_tmf_4]
+  172 ?  S 0:00 [scsi_eh_5]
+  173 ?  S< 0:00 [scsi_tmf_5]
+  182 ?  S< 0:00 [bioset]
+  208 ?  S< 0:00 [kworker/0:1H]
+  210 ?  S 0:00 [jbd2/sda1-8]
+  211 ?  S< 0:00 [ext4-rsv-conver]
+  221 ?  S 0:00 [kworker/7:1]
+  254 ?  S 0:00 [kauditd]
+  268 ?  Ss 0:00 /lib/systemd/systemd-journald
+  292 ?  Ss 0:00 /lib/systemd/systemd-udevd
+  391 ?  S 0:00 [kworker/7:2]
+  469 ?  S< 0:00 [kworker/1:1H]
+  474 ?  S< 0:00 [kworker/5:1H]
+  481 ?  S 0:00 [kworker/0:2]
+  483 ?  S 0:00 [irq/125-mei_me]
+  540 ?  Ssl 0:00 /lib/systemd/systemd-timesyncd
+  661 ?  S< 0:00 [led_workqueue]
+  795 ?  Ssl 0:00 /usr/sbin/rsyslogd -n
+  808 ?  Ss 0:00 /usr/sbin/cron -f
+  811 ?  Ss 0:00 /lib/systemd/systemd-logind
+  812 ?  Ssl 0:00 /usr/sbin/thermald --no-daemon --dbus-enable
+  818 ?  Ssl 0:00 /usr/lib/accountsservice/accounts-daemon
+  826 ?  Ss 0:00 /usr/sbin/acpid
+  844 ?  Ss 0:00 /usr/bin/dbus-daemon --system --address=systemd: 
+--nofork --nopidfile --systemd-activation
+  855 ?  S< 0:00 [kworker/2:1H]
+  866 ?  Ss 0:12 avahi-daemon: running [wolox-105.local]
+  868 ?  Ssl 0:00 /usr/sbin/ModemManager
+  870 ?  Ss 0:00 /usr/sbin/cupsd -l
+  873 ?  Ssl 0:00 /usr/sbin/NetworkManager --no-daemon
+  875 ?  Ssl 0:00 /usr/lib/snapd/snapd
+  905 ?  S 0:00 avahi-daemon: chroot helper
+  911 ?  Ssl 0:00 /usr/sbin/cups-browsed
+  912 ?  Ss 0:00 /usr/sbin/irqbalance --pid=/var/run/irqbalance.pid
+  918 ?  Ssl 0:00 /usr/lib/policykit-1/polkitd --no-debug
+  942 ?  S< 0:00 [kworker/3:1H]
+  945 ?  S 0:00 /usr/lib/cups/notifier/dbus dbus://
+  960 ?  SLsl 0:00 /usr/sbin/lightdm
+  980 ?  S 0:00 /usr/lib/postgresql/10/bin/postgres -D 
+/var/lib/postgresql/10/main -c 
+config_file=/etc/postgresql/10/main/postgresql.conf
+  981 ?  S 0:00 /usr/lib/postgresql/9.6/bin/postgres -D 
+/var/lib/postgresql/9.6/main -c 
+config_file=/etc/postgresql/9.6/main/postgresql.conf
+  983 tty7 Ssl+ 1:18 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth 
+/var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+ 1012 ?  Ss 0:00 postgres: 9.6/main: checkpointer process
+ 1013 ?  Ss 0:00 postgres: 9.6/main: writer process
+ 1014 ?  Ss 0:00 postgres: 9.6/main: wal writer process
+ 1015 ?  Ss 0:00 postgres: 9.6/main: autovacuum launcher process
+ 1016 ?  Ss 0:00 postgres: 9.6/main: stats collector process
+ 1019 ?  Ss 0:00 postgres: 10/main: checkpointer process
+ 1020 ?  Ss 0:00 postgres: 10/main: writer process
+ 1021 ?  Ss 0:00 postgres: 10/main: wal writer process
+ 1022 ?  Ss 0:00 postgres: 10/main: autovacuum launcher process
+ 1023 ?  Ss 0:00 postgres: 10/main: stats collector process
+ 1024 ?  Ss 0:00 postgres: 10/main: bgworker: logical replication 
+launcher
+ 1081 ?  S< 0:00 [kworker/4:1H]
+ 1083 ?  Sl 0:00 lightdm --session-child 12 19
+ 1158 ?  SNsl 0:00 /usr/lib/rtkit/rtkit-daemon
+ 1165 ?  Ssl 0:00 /usr/lib/upower/upowerd
+ 1181 ?  Ssl 0:00 /usr/lib/colord/colord
+ 1184 ?  S< 0:00 [kworker/7:1H]
+ 1240 ?  S 0:00 /sbin/dhclient -d -q -sf 
+/usr/lib/NetworkManager/nm-dhcp-helper -pf /var/run/dhclient-enp2s0.pid 
+-lf 
+/var/lib/NetworkManager/dhclient-c45ff361-a7e1-3d6b-90a8-2fb7f2d833a8-enp2s0.lease 
+-cf /var/lib/NetworkManager/dhclient-enp2s0.conf enp2s0
+ 1250 ?  S 0:00 /usr/sbin/dnsmasq --no-resolv --keep-in-foreground 
+--no-hosts --bind-interfaces 
+--pid-file=/var/run/NetworkManager/dnsmasq.pid 
+--listen-address=127.0.1.1 --cache-size=0 --conf-file=/dev/null 
+--proxy-dnssec --enable-dbus=org.freedesktop.NetworkManager.dnsmasq 
+--conf-dir=/etc/NetworkManager/dnsmasq.d
+ 1396 ?  S 0:00 /usr/lib/cups/notifier/dbus dbus://
+ 1399 ?  Ssl 0:00 /usr/bin/whoopsie -f
+ 1407 tty1 Ss+ 0:00 /sbin/agetty --noclear tty1 linux
+ 1450 ?  S< 0:00 [kworker/6:1H]
+ 1636 ?  Ss 0:00 /lib/systemd/systemd --user
+ 1638 ?  S 0:00 (sd-pam)
+ 1644 ?  SLl 0:00 /usr/bin/gnome-keyring-daemon --daemonize --login
+ 1646 ?  Ss 0:00 /sbin/upstart --user
+ 1725 ?  S 0:00 upstart-udev-bridge --daemon --user
+ 1733 ?  Ss 0:00 dbus-daemon --fork --session 
+--address=unix:abstract=/tmp/dbus-s1WrOBYMih
+ 1745 ?  Ss 0:00 /usr/lib/x86_64-linux-gnu/hud/window-stack-bridge
+ 1779 ?  S 0:00 upstart-dbus-bridge --daemon --session --user --bus-name 
+session
+ 1780 ?  S 0:00 upstart-dbus-bridge --daemon --system --user --bus-name 
+system
+ 1784 ?  S 0:00 upstart-file-bridge --daemon --user
+ 1790 ?  Ssl 0:13 /usr/bin/ibus-daemon --daemonize --xim --address 
+unix:tmpdir=/tmp/ibus
+ 1803 ?  Sl 0:00 /usr/lib/gvfs/gvfsd
+ 1808 ?  Sl 0:00 /usr/lib/gvfs/gvfsd-fuse /run/user/1001/gvfs -f -o 
+big_writes
+ 1813 ?  Sl 0:00 /usr/lib/ibus/ibus-dconf
+ 1818 ?  Sl 0:03 /usr/lib/ibus/ibus-ui-gtk3
+ 1820 ?  Sl 0:00 /usr/lib/ibus/ibus-x11 --kill-daemon
+ 1831 ?  Ssl 0:02 /usr/lib/x86_64-linux-gnu/bamf/bamfdaemon
+ 1837 ?  Sl 0:00 /usr/lib/at-spi2-core/at-spi-bus-launcher
+ 1844 ?  S 0:00 [kworker/u16:0]
+ 1845 ?  S 0:00 /usr/bin/dbus-daemon 
+--config-file=/etc/at-spi2/accessibility.conf --nofork --print-address 3
+ 1847 ?  Sl 0:00 /usr/lib/at-spi2-core/at-spi2-registryd 
+--use-gnome-session
+ 1854 ?  Sl 0:04 /usr/lib/ibus/ibus-engine-simple
+ 1869 ?  Ss 0:00 gpg-agent --homedir /home/amoragues/.gnupg 
+--use-standard-socket --daemon
+ 1879 ?  Ssl 0:00 /usr/lib/x86_64-linux-gnu/hud/hud-service
+ 1881 ?  Ssl 0:00 /usr/lib/unity-settings-daemon/unity-settings-daemon
+ 1888 ?  Ssl 0:00 /usr/lib/gnome-session/gnome-session-binary 
+--session=ubuntu
+ 1900 ?  Ssl 0:01 /usr/lib/x86_64-linux-gnu/unity/unity-panel-service
+ 1940 ?  Sl 0:00 /usr/lib/dconf/dconf-service
+ 1947 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-messages/indicator-messages-service
+ 1948 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-bluetooth/indicator-bluetooth-service
+ 1949 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service
+ 1950 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service
+ 1955 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service 
+--use-gtk
+ 1958 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service
+ 1959 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-printers/indicator-printers-service
+ 1961 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service
+ 1991 ?  Ssl 0:00 
+/usr/lib/x86_64-linux-gnu/indicator-application/indicator-application-service
+ 1994 ?  S<l 0:21 /usr/bin/pulseaudio --start --log-target=syslog
+ 2001 ?  Sl 0:00 /usr/lib/evolution/evolution-source-registry
+ 2031 ?  Ssl 1:30 compiz
+ 2057 ?  Sl 0:00 /usr/lib/evolution/evolution-calendar-factory
+ 2062 ?  Sl 0:00 nm-applet
+ 2073 ?  Sl 0:00 
+/usr/lib/unity-settings-daemon/unity-fallback-mount-helper
+ 2074 ?  Sl 0:00 nautilus -n
+ 2075 ?  SLl 0:00 /usr/bin/gnome-software --gapplication-service
+ 2076 ?  Sl 0:00 
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+ 2089 ?  Sl 0:00 /usr/lib/gvfs/gvfs-udisks2-volume-monitor
+ 2095 ?  Ssl 0:00 /usr/lib/udisks2/udisksd --no-debug
+ 2111 ?  Sl 0:00 /usr/lib/gvfs/gvfs-mtp-volume-monitor
+ 2118 ?  Sl 0:00 /usr/lib/gvfs/gvfs-goa-volume-monitor
+ 2124 ?  Sl 0:00 /usr/lib/gvfs/gvfs-afc-volume-monitor
+ 2130 ?  Sl 0:00 /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+ 2143 ?  Sl 0:00 
+/usr/lib/evolution/evolution-calendar-factory-subprocess --factory 
+contacts --bus-name 
+org.gnome.evolution.dataserver.Subprocess.Backend.Calendarx2057x2 
+--own-path 
+/org/gnome/evolution/dataserver/Subprocess/Backend/Calendar/2057/2
+ 2155 ?  Sl 0:00 /usr/lib/evolution/evolution-addressbook-factory
+ 2157 ?  Sl 0:00 
+/usr/lib/evolution/evolution-calendar-factory-subprocess --factory local 
+--bus-name 
+org.gnome.evolution.dataserver.Subprocess.Backend.Calendarx2057x3 
+--own-path 
+/org/gnome/evolution/dataserver/Subprocess/Backend/Calendar/2057/3
+ 2164 ?  Sl 0:00 
+/usr/lib/evolution/evolution-addressbook-factory-subprocess --factory 
+local --bus-name 
+org.gnome.evolution.dataserver.Subprocess.Backend.AddressBookx2155x2 
+--own-path 
+/org/gnome/evolution/dataserver/Subprocess/Backend/AddressBook/2155/2
+ 2185 ?  Sl 0:00 /usr/lib/gvfs/gvfsd-trash --spawner :1.4 
+/org/gtk/gvfs/exec_spaw/0
+ 2203 ?  S 0:00 [kworker/1:0]
+ 2218 ?  SLl 2:38 /opt/google/chrome/chrome
+ 2224 ?  S 0:00 cat
+ 2225 ?  S 0:00 cat
+ 2228 ?  S 0:00 /opt/google/chrome/chrome --type=zygote 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c,
+ 2229 ?  S 0:00 /opt/google/chrome/nacl_helper
+ 2232 ?  S 0:00 /opt/google/chrome/chrome --type=zygote 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c,
+ 2259 ?  Sl 1:28 /opt/google/chrome/chrome --type=gpu-process 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--gpu-preferences=KAAAAAAAAACAAACAAQAAAAAAAAAAAGAAEAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--service-request-channel-token=A5216CE081D2F5BE504DAB00FCBE4665
+ 2287 ?  S 0:00 /opt/google/chrome/chrome --type=-broker
+ 2300 ?  Sl 0:00 /usr/lib/x86_64-linux-gnu/notify-osd
+ 2374 ?  Sl 0:00 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=B0ABC94AF90C0789BD3013E881009701 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--extension-process --enable-offline-auto-reload 
+--enable-offline-auto-reload-visible-only --num-raster-threads=4 
+--enable-main-frame-before-activation 
+--service-request-channel-token=B0ABC94AF90C0789BD3013E881009701 
+--renderer-client-id=3 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2392 ?  Sl 0:05 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=30ADEB4A56387030D00A3EC6C00DE0FD --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--extension-process --enable-offline-auto-reload 
+--enable-offline-auto-reload-visible-only --num-raster-threads=4 
+--enable-main-frame-before-activation 
+--service-request-channel-token=30ADEB4A56387030D00A3EC6C00DE0FD 
+--renderer-client-id=4 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2400 ?  Sl 0:01 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=E1AB014633038757ECF077762CED1E71 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--extension-process --enable-offline-auto-reload 
+--enable-offline-auto-reload-visible-only --num-raster-threads=4 
+--enable-main-frame-before-activation 
+--service-request-channel-token=E1AB014633038757ECF077762CED1E71 
+--renderer-client-id=5 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2408 ?  Sl 0:00 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=3AFE313EB65315DBE4D45400741DDACB --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--extension-process --enable-offline-auto-reload 
+--enable-offline-auto-reload-visible-only --num-raster-threads=4 
+--enable-main-frame-before-activation 
+--service-request-channel-token=3AFE313EB65315DBE4D45400741DDACB 
+--renderer-client-id=6 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2480 ?  Sl 0:20 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=D54D8821843B9C1ED6D37F05A94296AB --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=D54D8821843B9C1ED6D37F05A94296AB 
+--renderer-client-id=11 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2507 ?  S 0:00 [kworker/3:0]
+ 2510 ?  S 0:00 [kworker/6:0]
+ 2514 ?  Sl 1:47 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=7FD1FB7A994B0E9CDCBE020553360E21 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=7FD1FB7A994B0E9CDCBE020553360E21 
+--renderer-client-id=12 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2515 ?  Sl 0:03 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=B0B9408FCC76C2A4F9DECAD0A31762A8 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=B0B9408FCC76C2A4F9DECAD0A31762A8 
+--renderer-client-id=13 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2529 ?  Sl 0:41 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=2C56A61991328524224C1E1D33E22C16 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=2C56A61991328524224C1E1D33E22C16 
+--renderer-client-id=14 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2531 ?  Sl 0:04 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=332B1126C25D94299C7EBCEB97CB6F9A --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=332B1126C25D94299C7EBCEB97CB6F9A 
+--renderer-client-id=15 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2547 ?  Sl 0:55 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=6147156C4F96B6F5AD00AC95A72A979A --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=6147156C4F96B6F5AD00AC95A72A979A 
+--renderer-client-id=19 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2565 ?  Sl 0:00 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=40C8D2032F98CBC99F170290F4F69545 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=40C8D2032F98CBC99F170290F4F69545 
+--renderer-client-id=20 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2661 ?  Sl 0:13 /opt/google/chrome/chrome --type=utility 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--lang=en-US --service-sandbox-type=cdm 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--service-request-channel-token=5C2E5A03230E57A6DA8ABBD0B01BB819 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2671 ?  Sl 0:00 zeitgeist-datahub
+ 2678 ?  S 0:00 /bin/sh -c 
+/usr/lib/x86_64-linux-gnu/zeitgeist/zeitgeist-maybe-vacuum; 
+/usr/bin/zeitgeist-daemon
+ 2682 ?  Sl 0:00 /usr/bin/zeitgeist-daemon
+ 2689 ?  Sl 0:00 /usr/lib/x86_64-linux-gnu/zeitgeist-fts
+ 2724 ?  Sl 0:13 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=34A55AAA61192DCBEDB9380A93163A23 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=34A55AAA61192DCBEDB9380A93163A23 
+--renderer-client-id=23 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 2866 ?  Sl 0:00 update-notifier
+ 2892 ?  Sl 0:00 
+/usr/lib/x86_64-linux-gnu/unity-scope-home/unity-scope-home
+ 2903 ?  Sl 0:00 /usr/bin/unity-scope-loader 
+applications/applications.scope applications/scopes.scope commands.scope
+ 2905 ?  Sl 0:00 
+/usr/lib/x86_64-linux-gnu/unity-lens-files/unity-files-daemon
+ 2946 ?  Sl 0:11 /usr/lib/gnome-terminal/gnome-terminal-server
+ 2953 pts/1 Ss 0:02 bash
+ 3282 ?  Sl 0:42 /usr/share/atom/atom
+ 3285 ?  S 0:00 /usr/share/atom/atom --type=zygote --no-sandbox
+ 3296 ?  S 0:00 /usr/lib/x86_64-linux-gnu/gconf/gconfd-2
+ 3316 ?  Sl 0:18 /usr/share/atom/atom --type=gpu-process --no-sandbox 
+--supports-dual-gpus=false --gpu-driver-bug-workarounds=1,7,23,61,74 
+--disable-gl-extensions=GL_KHR_blend_equation_advanced 
+GL_KHR_blend_equation_advanced_coherent --gpu-vendor-id=0x8086 
+--gpu-device-id=0x5912 --gpu-driver-vendor --gpu-driver-version 
+--gpu-driver-date 
+--service-request-channel-token=D1E3E9208235B6307224CEC0607D0A47
+ 3336 ?  Sl 1:02 /usr/share/atom/atom --type=renderer 
+--enable-experimental-web-platform-features --no-sandbox 
+--primordial-pipe-token=77A61370CDC821973AA85DB61CCC8A8F --lang=en-US 
+--app-path=/usr/share/atom/resources/app.asar --node-integration=true 
+--webview-tag=true --no-sandbox --disable-blink-features=Auxclick 
+--enable-pinch --num-raster-threads=4 
+--enable-main-frame-before-activation 
+--content-image-texture-target=0,0,3553;0,1,3553;0,2,3553;0,3,3553;0,4,3553;0,5,3553;0,6,3553;0,7,3553;0,8,3553;0,9,3553;0,10,3553;0,11,3553;0,12,3553;0,13,3553;0,14,3553;0,15,3553;1,0,3553;1,1,3553;1,2,3553;1,3,3553;1,4,3553;1,5,3553;1,6,3553;1,7,3553;1,8,3553;1,9,3553;1,10,3553;1,11,3553;1,12,3553;1,13,3553;1,14,3553;1,15,3553;2,0,3553;2,1,3553;2,2,3553;2,3,3553;2,4,3553;2,5,3553;2,6,3553;2,7,3553;2,8,3553;2,9,3553;2,10,3553;2,11,3553;2,12,3553;2,13,3553;2,14,3553;2,15,3553;3,0,3553;3,1,3553;3,2,3553;3,3,3553;3,4,3553;3,5,3553;3,6,3553;3,7,3553;3,8,3553;3,9,3553;3,10,3553;3,11,3553;3,12,3553;3,13,3553;3,14,3553;3,15,3553;4,0,3553;4,1,3553;4,2,3553;4,3,3553;4,4,3553;4,5,3553;4,6,3553;4,7,3553;4,8,3553;4,9,3553;4,10,3553;4,11,3553;4,12,3553;4,13,3553;4,14,3553;4,15,3553 
+--disable-accelerated-video-decode 
+--service-request-channel-token=77A61370CDC821973AA85DB61CCC8A8F 
+--renderer-client-id=4 
+--shared-files=v8_natives_data:100,v8_snapshot_data:101
+ 3711 ?  Sl 0:00 /usr/share/atom/atom --type=renderer 
+--enable-experimental-web-platform-features --no-sandbox 
+--primordial-pipe-token=AE54BA888AF7AEF8FC2DDB637ECE21F6 --lang=en-US 
+--app-path=/usr/share/atom/resources/app.asar --node-integration=true 
+--webview-tag=true --no-sandbox --enable-pinch --num-raster-threads=4 
+--enable-main-frame-before-activation 
+--content-image-texture-target=0,0,3553;0,1,3553;0,2,3553;0,3,3553;0,4,3553;0,5,3553;0,6,3553;0,7,3553;0,8,3553;0,9,3553;0,10,3553;0,11,3553;0,12,3553;0,13,3553;0,14,3553;0,15,3553;1,0,3553;1,1,3553;1,2,3553;1,3,3553;1,4,3553;1,5,3553;1,6,3553;1,7,3553;1,8,3553;1,9,3553;1,10,3553;1,11,3553;1,12,3553;1,13,3553;1,14,3553;1,15,3553;2,0,3553;2,1,3553;2,2,3553;2,3,3553;2,4,3553;2,5,3553;2,6,3553;2,7,3553;2,8,3553;2,9,3553;2,10,3553;2,11,3553;2,12,3553;2,13,3553;2,14,3553;2,15,3553;3,0,3553;3,1,3553;3,2,3553;3,3,3553;3,4,3553;3,5,3553;3,6,3553;3,7,3553;3,8,3553;3,9,3553;3,10,3553;3,11,3553;3,12,3553;3,13,3553;3,14,3553;3,15,3553;4,0,3553;4,1,3553;4,2,3553;4,3,3553;4,4,3553;4,5,3553;4,6,3553;4,7,3553;4,8,3553;4,9,3553;4,10,3553;4,11,3553;4,12,3553;4,13,3553;4,14,3553;4,15,3553 
+--disable-accelerated-video-decode 
+--service-request-channel-token=AE54BA888AF7AEF8FC2DDB637ECE21F6 
+--renderer-client-id=6 
+--shared-files=v8_natives_data:100,v8_snapshot_data:101
+ 3780 ?  Sl 0:00 /usr/lib/x86_64-linux-gnu/deja-dup/deja-dup-monitor
+ 3932 ?  S 0:00 [kworker/4:1]
+ 3933 ?  S 0:00 [kworker/4:3]
+ 4210 ?  S 0:00 [kworker/u16:1]
+ 4290 ?  S 0:00 [kworker/0:0]
+ 4295 pts/17 Ss 0:00 bash
+ 4648 pts/17 S+ 0:00 /usr/lib/postgresql/10/bin/psql training_project
+ 4656 ?  Ss 0:00 postgres: 9.6/main: amoragues training_project [local] 
+idle
+ 4666 ?  S 0:00 [kworker/1:1]
+ 4756 ?  S 0:00 [kworker/2:0]
+ 5052 ?  S 0:00 [kworker/6:1]
+ 5108 ?  S 0:00 [kworker/3:2]
+ 5156 ?  S 0:00 [kworker/2:1]
+ 5157 ?  Sl 0:01 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=DBAD37C5D1CFB6C5D6AD9ECFF7F14E2A --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=DBAD37C5D1CFB6C5D6AD9ECFF7F14E2A 
+--renderer-client-id=29 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 5177 ?  Sl 0:15 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=2DA26AF457E12681473CBD6B43C5A6FD --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=2DA26AF457E12681473CBD6B43C5A6FD 
+--renderer-client-id=30 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 5197 ?  Sl 0:13 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=1E8A9631EA718048AE6FEDBF641A2924 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=1E8A9631EA718048AE6FEDBF641A2924 
+--renderer-client-id=31 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 5213 ?  Sl 0:00 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=35FE53560AD28B49C98489C7591FCD06 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=35FE53560AD28B49C98489C7591FCD06 
+--renderer-client-id=32 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 5230 ?  Sl 0:00 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=990EBCCF72257BE7856C2394377C53EA --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=990EBCCF72257BE7856C2394377C53EA 
+--renderer-client-id=33 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 5408 ?  S 0:00 [kworker/0:1]
+ 5464 ?  S 0:00 [kworker/5:2]
+ 5473 ?  Sl 0:00 /opt/google/chrome/chrome --type=renderer 
+--field-trial-handle=6616754881739973700,12429071527566345262,131072 
+--service-pipe-token=A68090EA9D66A1B1FB7CBCD15405D613 --lang=en-US 
+--enable-crash-reporter=58346f6d-8aa0-4b2f-8240-c68fff28811c, 
+--enable-offline-auto-reload --enable-offline-auto-reload-visible-only 
+--num-raster-threads=4 --enable-main-frame-before-activation 
+--service-request-channel-token=A68090EA9D66A1B1FB7CBCD15405D613 
+--renderer-client-id=41 
+--shared-files=v8_context_snapshot_data:100,v8_natives_data:101
+ 5547 ?  S 0:00 [kworker/u16:2]
+ 5969 pts/1 T 0:00 nano package.json
+ 5985 pts/1 R+ 0:00 ps -ax
+ 5986 pts/1 R+ 0:00 nano
