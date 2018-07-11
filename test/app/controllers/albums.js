@@ -23,7 +23,7 @@ nock('https://jsonplaceholder.typicode.com')
 
 describe('albums controller', () => {
   describe('/albums GET', () => {
-    it.only('lists albums correctly', done => {
+    it('lists albums correctly', done => {
       const user = {
         firstName: 'firstName',
         lastName: 'lastName',
