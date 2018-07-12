@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         throw errors.emailDuplicated(user.email);
       } else {
         if (next) {
-          next(error);
+          next(errors.parametersInvalid);
         } else {
           throw errors.parametersInvalid;
         }
