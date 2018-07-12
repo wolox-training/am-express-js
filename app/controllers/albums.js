@@ -30,3 +30,7 @@ exports.buyAlbum = (req, res, next) => {
       next(err);
     });
 };
+
+exports.showAlbumsBought = (req, res, next) => {
+
+};
