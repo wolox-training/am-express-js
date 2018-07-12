@@ -5,7 +5,7 @@ exports.config = {
     database: {
       name: process.env.NODE_API_DB_NAME_TEST
     },
-    albumList: process.env.ALBUM_LIST_URL,
+    albumList: 'https://jsonplaceholder.typicode.com',
     session: {
       secret: 'some-super-secret'
     }
