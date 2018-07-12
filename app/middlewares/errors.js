@@ -8,6 +8,7 @@ const statusCodes = {
   [errors.EMAIL_DUPLICATED]: 422,
   [errors.EMAIL_NOT_VALID]: 422,
   [errors.PASSWORD_NOT_VALID]: 422,
+  [errors.ALREADY_BOUGHT]: 422,
   [errors.PARAMETERS_INVALID]: 400,
   [errors.INCORRECT_CREDENTIALS]: 400,
   [errors.UNAUTHORIZED_NO_LOGIN]: 403

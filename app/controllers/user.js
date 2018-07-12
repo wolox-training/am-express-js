@@ -73,7 +73,7 @@ exports.signIn = (req, res, next) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password).then(isValid => {
         if (isValid) {
-          const auth = sessionsManager.encode({ email: user.email });
+          const auth = sessionsManager.encode({ email: user.email, id: user.id });
           res.status(200);
           res.set(sessionsManager.HEADER_NAME, auth);
           res.send(user);

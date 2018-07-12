@@ -16,17 +16,14 @@ exports.listAlbums = (req, res, next) => {
 
 exports.buyAlbum = (req, res, next) => {
   const decoded = sessionsManager.decode(req.headers.authorization);
-
-  return User.findOne({ where: { email: decoded.email } })
-    .then(user => {
-      console.log(user.dataValues.id);
-      const sale = {
-        userId: user.dataValues.id,
-        albumId: req.params.id
-      };
-      return albums.createModel(sale).then(newSale => {
-        res.status(200).send({ sale: newSale });
-      });
+  const sale = {
+    userId: decoded.id,
+    albumId: req.params.id
+  };
+  return albums
+    .createModel(sale)
+    .then(newSale => {
+      res.status(200).send({ sale: newSale });
     })
     .catch(err => {
       next(err);

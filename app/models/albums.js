@@ -26,10 +26,12 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   albums.createModel = sale => {
-    albums
+    return albums
       .findOne({ where: { userId: sale.userId, albumId: sale.albumId } })
       .then(alreadyBought => {
+        console.log('\nyee');
         if (alreadyBought) {
+          console.log('\n cant let you do that');
           throw errors.alreadyBought(sale.userId, sale.albumId);
         } else {
           return albums.create(sale);
@@ -37,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       })
       .catch(error => {
         logger.error('Already bought');
+        throw errors.alreadyBought(sale.userId, sale.albumId);
       });
   };
   return albums;
