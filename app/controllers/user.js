@@ -16,12 +16,38 @@ const passwordValid = password => {
   return isAlphanumeric.test(password) && password.length >= 8;
 };
 
+const generateUser = (user, next) => {
+  if (!emailValid(user.email)) {
+    logger.error(`Email: ${user.email} invalid.`);
+    return next(errors.emailNotValid(user.email));
+  }
+  if (!passwordValid(user.password)) {
+    logger.error('Password invalid.');
+    return next(errors.passwordInvalid);
+  }
+  logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
+  return bcrypt.hash(user.password, saltRounds).then(hash => {
+    user.password = hash;
+    return User.createModel(user);
+  });
+};
+const giveAdminPriviledges = user => {
+  return User.update({ admin: true }, { returning: true, where: { email: user.email } });
+};
+
 exports.adminSignUp = (req, res, next) => {
+  const user = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    password: req.body.password,
+    admin: true
+  };
   User.getUserByEmail(req.body.email).then(existingUser => {
     if (existingUser) {
       bcrypt.compare(req.body.password, existingUser.password).then(isValid => {
         if (isValid) {
-          User.update({ admin: true }, { returning: true, where: { email: req.body.email } })
+          giveAdminPriviledges(user)
             .then(() => {
               res.status(200);
               res.send({ newAdmin: existingUser });
@@ -34,34 +60,13 @@ exports.adminSignUp = (req, res, next) => {
         }
       });
     } else {
-      if (!emailValid(req.body.email)) {
-        logger.error(`Email: ${req.body.email} invalid.`);
-        return next(errors.emailNotValid(req.body.email));
-      }
-      if (!passwordValid(req.body.password)) {
-        logger.error('Password invalid.');
-        return next(errors.passwordInvalid);
-      }
-
-      const newAdmin = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: req.body.password,
-        admin: true
-      };
-
-      logger.info(`All validations passed, going to create the newAdmin: ${JSON.stringify(newAdmin)}`);
-      bcrypt
-        .hash(newAdmin.password, saltRounds)
-        .then(hash => {
-          newAdmin.password = hash;
-          return User.createModel(newAdmin).then(auxUser => {
-            res.status(201).send({ newAdmin: auxUser });
-          });
+      generateUser(user, next);
+      giveAdminPriviledges(user, next)
+        .then(auxUser => {
+          res.status(201).send({ user });
         })
         .catch(error => {
-          logger.error('Admin creation failed');
+          logger.error('admin creation failed');
           next(error);
         });
     }
@@ -89,15 +94,6 @@ exports.signIn = (req, res, next) => {
 };
 
 exports.signUp = (req, res, next) => {
-  if (!emailValid(req.body.email)) {
-    logger.error(`Email: ${req.body.email} invalid.`);
-    return next(errors.emailNotValid(req.body.email));
-  }
-  if (!passwordValid(req.body.password)) {
-    logger.error('Password invalid.');
-    return next(errors.passwordInvalid);
-  }
-
   const user = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -105,15 +101,9 @@ exports.signUp = (req, res, next) => {
     password: req.body.password,
     admin: false
   };
-
-  logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
-  bcrypt
-    .hash(user.password, saltRounds)
-    .then(hash => {
-      user.password = hash;
-      return User.createModel(user).then(auxUser => {
-        res.status(201).send({ user: auxUser });
-      });
+  generateUser(user, next)
+    .then(auxUser => {
+      res.status(201).send({ user: auxUser });
     })
     .catch(error => {
       logger.error('User creation failed');

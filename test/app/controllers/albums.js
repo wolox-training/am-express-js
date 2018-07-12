@@ -6,14 +6,24 @@ const chai = require('chai'),
   sessionsManager = require('./../../../app/services/sessionsManager'),
   errors = require('./../../../app/errors'),
   simple = require('simple-mock'),
+  nock = require('nock'),
   fetch = require('node-fetch'),
+  albums = require('./../../../app/models').albums,
   User = require('./../../../app/models').user;
 
 const saltRounds = 10;
-simple.mock(fetch('https://jsonplaceholder.typicode.com/albums'), 'example', { album: 'album title' });
+nock('https://jsonplaceholder.typicode.com')
+  .get('/albums')
+  .reply(200, [
+    {
+      userId: 1,
+      id: 1,
+      title: 'quidem molestiae enim'
+    }
+  ]);
 
 describe('albums controller', () => {
-  describe.only('/albums/:id POST', () => {
+  describe('/albums/:id POST', () => {
     it('buys album correctly', done => {
       const user = {
         firstName: 'firstName',
@@ -52,7 +62,19 @@ describe('albums controller', () => {
         });
     });
 
-    it.only('buys album correctly', done => {
+    it('doesnt let user buy album twice', done => {
+      chai
+        .request(server)
+        .post('/albums/1')
+        .catch(err => {
+          err.should.have.status(403);
+          err.response.body.should.have.property('message');
+          err.response.body.should.have.property('internal_code');
+          done();
+        });
+    });
+
+    it('doesnt let user buy album twice', done => {
       const user = {
         firstName: 'firstName',
         lastName: 'lastName',
@@ -68,31 +90,37 @@ describe('albums controller', () => {
           return User.createModel(user);
         })
         .then(u => {
-          chai
-            .request(server)
-            .post('/users/sessions')
-            .send({
-              email: 'email1@wolox.com.ar',
-              password: 'password'
-            })
-            .then(auth => {
-              chai
-                .request(server)
-                .post('/albums/1')
-                .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
-                .then(res => {
-                  chai
-                    .request(server)
-                    .post('/albums/1')
-                    .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME]);
-                })
-                .catch(err => {
-                  err.should.have.status(422);
-                  err.response.body.should.have.property('message');
-                  err.response.body.should.have.property('internal_code');
-                  done();
-                });
-            });
+          const sale = {
+            userId: 1,
+            albumId: 1
+          };
+          albums.createModel(sale).then(s => {
+            chai
+              .request(server)
+              .post('/users/sessions')
+              .send({
+                email: 'email1@wolox.com.ar',
+                password: 'password'
+              })
+              .then(auth => {
+                chai
+                  .request(server)
+                  .post('/albums/1')
+                  .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                  .then(res => {
+                    chai
+                      .request(server)
+                      .post('/albums/1')
+                      .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME]);
+                  })
+                  .catch(err => {
+                    err.should.have.status(422);
+                    err.response.body.should.have.property('message');
+                    err.response.body.should.have.property('internal_code');
+                    done();
+                  });
+              });
+          });
         });
     });
   });
@@ -105,7 +133,6 @@ describe('albums controller', () => {
         password: 'password',
         email: 'email1@wolox.com.ar'
       };
-
       bcrypt
         .hash(user.password, saltRounds)
         .then(hash => {
@@ -127,15 +154,16 @@ describe('albums controller', () => {
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .then(res => {
                   res.should.have.status(200);
+                  res.body.should.have.lengthOf(1);
                   res.should.be.json;
-                  dictum.chai(res);
+                  dictum.chai(res, 'Returns all albums');
                   done();
                 });
             });
         });
     });
 
-    it('denies access to list albums', done => {
+    it('denies access to list albums to non logged user', done => {
       const user = {
         firstName: 'firstName',
         lastName: 'lastName',
