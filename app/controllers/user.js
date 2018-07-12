@@ -28,7 +28,7 @@ const generateUser = (user, next) => {
   logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
   return bcrypt.hash(user.password, saltRounds).then(hash => {
     user.password = hash;
-    return User.createModel(user);
+    return User.createModel(user, next);
   });
 };
 const giveAdminPriviledges = user => {

@@ -36,12 +36,16 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
   };
 
-  User.createModel = user => {
+  User.createModel = (user, next = null) => {
     return User.create(user).catch(error => {
       if (error.name === 'SequelizeUniqueConstraintError') {
         throw errors.emailDuplicated(user.email);
       } else {
-        throw errors.parametersInvalid;
+        if (next) {
+          next(error);
+        } else {
+          throw errors.parametersInvalid;
+        }
       }
     });
   };
