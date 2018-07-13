@@ -16,15 +16,14 @@ exports.listAlbums = (req, res, next) => {
 };
 
 exports.buyAlbum = (req, res, next) => {
-  const decoded = sessionsManager.decode(req.headers.authorization);
   const sale = {
-    userId: decoded.id,
+    userId: req.user.id,
     albumId: req.params.id
   };
   return albums
     .createModel(sale)
     .then(newSale => {
-      res.status(200).send({ sale: newSale });
+      res.status(201).send({ sale: newSale });
     })
     .catch(err => {
       next(err);

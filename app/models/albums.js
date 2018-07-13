@@ -26,21 +26,13 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   albums.createModel = sale => {
-    return albums
-      .findOne({ where: { userId: sale.userId, albumId: sale.albumId } })
-      .then(alreadyBought => {
-        console.log('\nyee');
-        if (alreadyBought) {
-          console.log('\n cant let you do that');
-          throw errors.alreadyBought(sale.userId, sale.albumId);
-        } else {
-          return albums.create(sale);
-        }
-      })
-      .catch(error => {
-        logger.error('Already bought');
+    return albums.findOne({ where: { userId: sale.userId, albumId: sale.albumId } }).then(alreadyBought => {
+      if (alreadyBought) {
         throw errors.alreadyBought(sale.userId, sale.albumId);
-      });
+      } else {
+        return albums.create(sale);
+      }
+    });
   };
   return albums;
 };

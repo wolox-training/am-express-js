@@ -53,7 +53,7 @@ describe('albums controller', () => {
                 .post('/albums/1')
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .then(res => {
-                  res.should.have.status(200);
+                  res.should.have.status(201);
                   res.body.should.have.property('sale');
                   dictum.chai(res, 'User buys album');
                   done();
@@ -62,7 +62,7 @@ describe('albums controller', () => {
         });
     });
 
-    it('doesnt let user buy album twice', done => {
+    it('doesnt let user buy album to non logged user', done => {
       chai
         .request(server)
         .post('/albums/1')
