@@ -1,7 +1,9 @@
-const userController = require('./controllers/user');
+const userController = require('./controllers/user'),
+  authCheck = require('./middlewares/authCheck.js');
 
 exports.init = app => {
-  // app.get('/endpoint/get/path', [], controller.methodGET);
+  app.get('/users', [authCheck.checkUser], userController.listUsers);
   // app.put('/endpoint/put/path', [], controller.methodPUT);
   app.post('/users', [], userController.signUp);
+  app.post('/users/sessions', [], userController.signIn);
 };

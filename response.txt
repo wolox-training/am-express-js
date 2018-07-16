@@ -1,0 +1,1 @@
+{"id":20,"firstName":"asddas","lastName":"value2","email":"amoragues 09@wolox.com.ar","password":"$2a$10$wB9oB0/dvVeNzNvd0x3zp.k3rmNFjbbw7BC7g.4.4I2F6lcKAmSU.","created_at":"2018-06-28T21:30:23.984Z","updated_at":"2018-06-28T21:30:23.984Z"}
