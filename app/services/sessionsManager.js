@@ -5,10 +5,10 @@ const SECRET = config.common.session.secret;
 
 exports.HEADER_NAME = config.common.session.header_name;
 
-exports.encode = password => {
-  return jwt.encode(password, SECRET);
+exports.encode = token => {
+  return jwt.encode(token, SECRET);
 };
 
-exports.decode = password => {
-  return jwt.decode(password, SECRET);
+exports.decode = token => {
+  return jwt.decode(token, SECRET);
 };

@@ -46,5 +46,10 @@ module.exports = (sequelize, DataTypes) => {
     return User.findOne({ where: { email: e } });
   };
 
+  User.getUsers = (page = 1, size = 10) => {
+    const offset = size * page - size;
+    return User.findAndCountAll({ offset, limit: size });
+  };
+
   return User;
 };
