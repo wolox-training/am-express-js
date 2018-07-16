@@ -9,14 +9,15 @@ exports.checkValidAlbumId = (req, res, next) => {
   return axios
     .get(url)
     .then(json => {
-      if (json) {
-        logger.info('User requested albums and received album list');
-        res.status(200).send(json.data);
-      } else {
-        throw errors.parametersInvalid;
-      }
+      console.log(url);
+      console.log(json.status);
+      logger.info('User requested albums and received album list');
+      req.albumList = json.data;
+      next();
     })
     .catch(error => {
-      next(error);
+      console.log(url);
+      console.log(error.status);
+      next(errors.parametersInvalid);
     });
 };
