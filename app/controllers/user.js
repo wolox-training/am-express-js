@@ -43,46 +43,31 @@ exports.adminSignUp = (req, res, next) => {
     password: req.body.password,
     admin: true
   };
-  User.getUserByEmail(req.body.email).then(existingUser => {
-    if (existingUser) {
-      bcrypt
-        .compare(req.body.password, existingUser.password)
-        .then(isValid => {
+  return User.getUserByEmail(req.body.email)
+    .then(existingUser => {
+      if (existingUser) {
+        return bcrypt.compare(req.body.password, existingUser.password).then(isValid => {
           if (isValid) {
-            giveAdminPrivileges(existingUser)
-              .then(() => {
-                res.status(200);
-                res.send({ newAdmin: existingUser });
-              })
-              .catch(err => {
-                next(err);
-              });
+            return giveAdminPrivileges(existingUser).then(() => {
+              res.status(200);
+              res.send({ newAdmin: existingUser });
+            });
           } else {
             throw errors.incorrectCredentials;
           }
-        })
-        .catch(error => {
-          logger.error('admin creation failed');
-          next(error);
         });
-    } else {
-      generateUser(userParams, next)
-        .then(user => {
-          giveAdminPrivileges(user, next)
-            .then(() => {
-              res.status(201).send({ user });
-            })
-            .catch(err => {
-              logger.error('admin creation failed');
-              next(err);
-            });
-        })
-        .catch(error => {
-          logger.error('admin creation failed');
-          next(error);
+      } else {
+        return generateUser(userParams, next).then(user => {
+          return giveAdminPrivileges(user, next).then(() => {
+            res.status(201).send({ user });
+          });
         });
-    }
-  });
+      }
+    })
+    .catch(error => {
+      logger.error('admin creation failed');
+      next(error);
+    });
 };
 
 exports.signIn = (req, res, next) => {

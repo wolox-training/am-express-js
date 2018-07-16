@@ -10,7 +10,7 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 describe('users controller', () => {
-  describe('/admin/users POST', () => {
+  describe.only('/admin/users POST', () => {
     it('creates a new admin', done => {
       User.count().then(oldCount => {
         chai
