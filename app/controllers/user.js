@@ -19,11 +19,11 @@ const passwordValid = password => {
 const generateUser = (user, next) => {
   if (!emailValid(user.email)) {
     logger.error(`Email: ${user.email} invalid.`);
-    return next(errors.emailNotValid(user.email));
+    throw errors.emailNotValid(user.email);
   }
   if (!passwordValid(user.password)) {
     logger.error('Password invalid.');
-    return next(errors.passwordInvalid);
+    throw errors.passwordInvalid;
   }
   logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
   return bcrypt.hash(user.password, saltRounds).then(hash => {
@@ -31,46 +31,43 @@ const generateUser = (user, next) => {
     return User.createModel(user);
   });
 };
-const giveAdminPriviledges = user => {
-  return User.update({ admin: true }, { returning: true, where: { email: user.email } });
+const giveAdminPrivileges = userParams => {
+  return User.update({ admin: true }, { returning: true, where: { email: userParams.email } });
 };
 
 exports.adminSignUp = (req, res, next) => {
-  const user = {
+  const userParams = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
     admin: true
   };
-  User.getUserByEmail(req.body.email).then(existingUser => {
-    if (existingUser) {
-      bcrypt.compare(req.body.password, existingUser.password).then(isValid => {
-        if (isValid) {
-          giveAdminPriviledges(user)
-            .then(() => {
+  return User.getUserByEmail(req.body.email)
+    .then(existingUser => {
+      if (existingUser) {
+        return bcrypt.compare(req.body.password, existingUser.password).then(isValid => {
+          if (isValid) {
+            return giveAdminPrivileges(existingUser).then(() => {
               res.status(200);
               res.send({ newAdmin: existingUser });
-            })
-            .catch(err => {
-              next(err);
             });
-        } else {
-          return next(errors.incorrectCredentials);
-        }
-      });
-    } else {
-      generateUser(user, next);
-      giveAdminPriviledges(user, next)
-        .then(auxUser => {
-          res.status(201).send({ user });
-        })
-        .catch(error => {
-          logger.error('admin creation failed');
-          next(error);
+          } else {
+            throw errors.incorrectCredentials;
+          }
         });
-    }
-  });
+      } else {
+        return generateUser(userParams, next).then(user => {
+          return giveAdminPrivileges(user, next).then(() => {
+            res.status(201).send({ user });
+          });
+        });
+      }
+    })
+    .catch(error => {
+      logger.error('admin creation failed');
+      next(error);
+    });
 };
 
 exports.signIn = (req, res, next) => {
@@ -109,44 +106,21 @@ exports.signUp = (req, res, next) => {
       logger.error('User creation failed');
       next(error);
     });
-  /* if (!emailValid(req.body.email)) {
-    logger.error(`Email: ${req.body.email} invalid.`);
-    return next(errors.emailNotValid(req.body.email));
-  }
-  if (!passwordValid(req.body.password)) {
-    logger.error('Password invalid.');
-    return next(errors.passwordInvalid);
-  }
-  logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
-  bcrypt
-    .hash(user.password, saltRounds)
-    .then(hash => {
-      user.password = hash;
-      return User.createModel(user).then(auxUser => {
-        res.status(201).send({ user: auxUser });
-      });
-    })
-    .catch(error => {
-      logger.error('User creation failed');
-      next(error);
-    }); */
 };
 
 exports.listUsers = (req, res, next) => {
-  User.count().then(total => {
-    if (req.query.page < 1 || req.query.limit < 1) return next(errors.parametersInvalid);
-    User.getUsers(req.query.page, req.query.limit)
-      .then(users => {
-        res.status(200).send({
-          users,
-          page: req.query.page ? req.query.page : 1,
-          totalPages: Math.ceil(total / (req.query.limit ? req.query.limit : 10)),
-          totalUsers: total
-        });
-      })
-      .catch(err => {
-        logger.error('Error looking for users in the database');
-        next(err);
+  if (req.query.page < 1 || req.query.limit < 1) return next(errors.parametersInvalid);
+  User.getUsers(req.query.page, req.query.limit)
+    .then(users => {
+      res.status(200).send({
+        users: users.rows,
+        page: req.query.page ? req.query.page : 1,
+        totalPages: Math.ceil(users.count / (req.query.limit ? req.query.limit : 10)),
+        totalUsers: users.count
       });
-  });
+    })
+    .catch(err => {
+      logger.error('Error looking for users in the database');
+      next(err);
+    });
 };
