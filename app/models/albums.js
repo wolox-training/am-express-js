@@ -2,7 +2,7 @@ const logger = require('../logger'),
   errors = require('../errors');
 
 module.exports = (sequelize, DataTypes) => {
-  const albums = sequelize.define(
+  const album = sequelize.define(
     'albums',
     {
       userId: {
@@ -21,26 +21,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  albums.associate = function(models) {
+  album.associate = function(models) {
     // associations can be defined here
   };
 
-  albums.createModel = sale => {
-    return albums
-      .findOne({ where: { userId: sale.userId, albumId: sale.albumId } })
-      .then(alreadyBought => {
-        console.log('\nyee');
-        if (alreadyBought) {
-          console.log('\n cant let you do that');
-          throw errors.alreadyBought(sale.userId, sale.albumId);
-        } else {
-          return albums.create(sale);
-        }
-      })
-      .catch(error => {
-        logger.error('Already bought');
+  album.createModel = sale => {
+    return album.findOne({ where: { userId: sale.userId, albumId: sale.albumId } }).then(alreadyBought => {
+      if (alreadyBought) {
         throw errors.alreadyBought(sale.userId, sale.albumId);
-      });
+      } else {
+        return album.create(sale);
+      }
+    });
   };
-  return albums;
+  return album;
 };

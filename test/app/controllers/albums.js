@@ -12,17 +12,92 @@ const chai = require('chai'),
   User = require('./../../../app/models').user;
 
 const saltRounds = 10;
-nock('https://jsonplaceholder.typicode.com')
-  .get('/albums')
-  .reply(200, [
-    {
-      userId: 1,
-      id: 1,
-      title: 'quidem molestiae enim'
-    }
-  ]);
+
+beforeEach(() => {
+  nock('https://jsonplaceholder.typicode.com')
+    .get('/albums')
+    .reply(200, [
+      {
+        userId: 1,
+        id: 1,
+        title: 'quidem molestiae enim'
+      }
+    ]);
+
+  nock('https://jsonplaceholder.typicode.com')
+    .get('/albums/1')
+    .reply(200, [
+      {
+        userId: 1,
+        id: 1,
+        title: 'quidem molestiae enim'
+      }
+    ]);
+
+  nock('https://jsonplaceholder.typicode.com')
+    .get('/albums/2')
+    .reply(200, [
+      {
+        userId: 1,
+        id: 2,
+        title: 'sunt qui excepturi placeat culpa'
+      }
+    ]);
+
+  nock('https://jsonplaceholder.typicode.com')
+    .get('/albums/1000')
+    .reply(404, []);
+});
 
 describe('albums controller', () => {
+  describe('/users/:userId/albums GET', () => {
+    it.only('shows bought albums', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          const sale = {
+            userId: 1,
+            albumId: 1
+          };
+          albums.createModel(sale).then(firstSale => {
+            sale.albumId = 2;
+            albums.createModel(sale).then(s => {
+              chai
+                .request(server)
+                .post('/users/sessions')
+                .send({
+                  email: 'email1@wolox.com.ar',
+                  password: 'password'
+                })
+                .then(auth => {
+                  chai
+                    .request(server)
+                    .get('/users/1/albums')
+                    .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                    .then(res => {
+                      console.log(res.body);
+                      res.should.have.status(200);
+                      done();
+                    });
+                });
+            });
+          });
+        });
+    });
+  });
+
   describe('/albums/:id POST', () => {
     it('buys album correctly', done => {
       const user = {
@@ -53,7 +128,7 @@ describe('albums controller', () => {
                 .post('/albums/1')
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .then(res => {
-                  res.should.have.status(200);
+                  res.should.have.status(201);
                   res.body.should.have.property('sale');
                   dictum.chai(res, 'User buys album');
                   done();
@@ -62,7 +137,45 @@ describe('albums controller', () => {
         });
     });
 
-    it('doesnt let user buy album twice', done => {
+    it('doesnt accept album ID', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          chai
+            .request(server)
+            .post('/users/sessions')
+            .send({
+              email: 'email1@wolox.com.ar',
+              password: 'password'
+            })
+            .then(auth => {
+              chai
+                .request(server)
+                .post('/albums/1000')
+                .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                .catch(error => {
+                  error.should.have.status(400);
+                  error.response.body.should.have.property('message');
+                  error.response.body.should.have.property('internal_code');
+                  done();
+                });
+            });
+        });
+    });
+
+    it('doesnt let user buy album to non logged user', done => {
       chai
         .request(server)
         .post('/albums/1')
@@ -107,12 +220,6 @@ describe('albums controller', () => {
                   .request(server)
                   .post('/albums/1')
                   .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
-                  .then(res => {
-                    chai
-                      .request(server)
-                      .post('/albums/1')
-                      .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME]);
-                  })
                   .catch(err => {
                     err.should.have.status(422);
                     err.response.body.should.have.property('message');

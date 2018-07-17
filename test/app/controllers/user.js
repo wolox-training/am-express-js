@@ -450,7 +450,6 @@ describe('users controller', () => {
             email: 'email1@wolox.com.ar'
           })
           .catch(err => {
-            console.log(err.response);
             err.response.should.be.json;
             err.response.body.should.have.property('message');
 

@@ -1,30 +1,34 @@
 const User = require('../models').user,
-  albums = require('../models').albums,
+  Album = require('../models').albums,
   logger = require('../logger'),
   config = require('../../config'),
   fetch = require('node-fetch'),
   axios = require('axios'),
+  albumFetcher = require('../services/albumFetcher'),
   sessionsManager = require('../services/sessionsManager'),
   errors = require('../errors');
 
 exports.listAlbums = (req, res, next) => {
-  const url = `${config.common.albumList}/albums`;
-  return axios.get(url).then(json => {
-    logger.info('User requested albums and received album list');
-    res.status(200).send(json.data);
-  });
+  const albumsList = [];
+  albumFetcher
+    .listAlbums(albumsList)
+    .then(albums => {
+      res.status(200).send({ albums });
+    })
+    .catch(error => {
+      next(error);
+    });
 };
 
 exports.buyAlbum = (req, res, next) => {
-  const decoded = sessionsManager.decode(req.headers.authorization);
   const sale = {
-    userId: decoded.id,
+    userId: req.user.id,
     albumId: req.params.id
   };
-  return albums
+  return Album
     .createModel(sale)
     .then(newSale => {
-      res.status(200).send({ sale: newSale });
+      res.status(201).send({ sale: newSale });
     })
     .catch(err => {
       next(err);
@@ -32,5 +36,20 @@ exports.buyAlbum = (req, res, next) => {
 };
 
 exports.showAlbumsBought = (req, res, next) => {
-
+  return Album
+    .findAll({ where: { userId: req.user.id } })
+    .then(purchases => {
+      const promises = purchases.map(element => {
+        return albumFetcher.getAlbumById(element.albumId);
+      });
+      console.log(promises);
+      return Promise.all(promises).then(albumsBought => {
+        console.log(albumsBought);
+        res.status(200);
+        res.send({ albums: albumsBought });
+      });
+    })
+    .catch(error => {
+      next(error);
+    });
 };
