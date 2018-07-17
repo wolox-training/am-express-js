@@ -1,15 +1,169 @@
 const chai = require('chai'),
-  server = require('./../app'),
+  server = require('./../../../app'),
   dictum = require('dictum.js'),
   should = chai.should(),
   bcrypt = require('bcryptjs'),
-  sessionsManager = require('./../app/services/sessionsManager'),
-  errors = require('./../app/errors'),
-  User = require('./../app/models').user;
+  sessionsManager = require('./../../../app/services/sessionsManager'),
+  errors = require('./../../../app/errors'),
+  User = require('./../../../app/models').user;
 
 const saltRounds = 10;
 
 describe('users controller', () => {
+  describe('/admin/users POST', () => {
+    it('creates a new admin', done => {
+      User.count().then(oldCount => {
+        chai
+          .request(server)
+          .post('/admin/users')
+          .send({
+            firstName: 'firstName',
+            lastName: 'lastName',
+            username: 'username',
+            password: 'password',
+            email: 'email1@wolox.com.ar'
+          })
+          .then(res => {
+            res.should.have.status(201);
+            res.body.should.have.property('newAdmin');
+            res.body.newAdmin.should.have.property('created_at');
+            User.count().then(newCount => {
+              newCount.should.be.equal(oldCount + 1);
+              dictum.chai(res, 'Creates a new admin');
+              done();
+            });
+          });
+      });
+    });
+
+    it('creates an admin from previous user', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(existingUser => {
+          User.count().then(oldCount => {
+            chai
+              .request(server)
+              .post('/admin/users')
+              .send({
+                firstName: 'firstName',
+                lastName: 'lastName',
+                username: 'username',
+                password: 'password',
+                email: 'email1@wolox.com.ar'
+              })
+              .then(res => {
+                res.should.have.status(200);
+                res.body.should.have.property('newAdmin');
+                res.body.newAdmin.should.have.property('created_at');
+                User.count().then(newCount => {
+                  newCount.should.be.equal(oldCount);
+                  dictum.chai(res, 'Creates a new admin');
+                  done();
+                });
+              });
+          });
+        });
+    });
+    it('fails due to invalid email', done => {
+      User.count().then(oldCount => {
+        chai
+          .request(server)
+          .post('/admin/users')
+          .send({
+            firstName: 'firstName',
+            lastName: 'lastName',
+            username: 'username',
+            password: 'password',
+            email: 'email1@molox.com.ar'
+          })
+          .catch(err => {
+            err.should.have.status(422);
+            err.response.should.be.json;
+            err.response.body.should.have.property('message');
+            err.response.body.should.have.property('internal_code');
+            User.count().then(newCount => {
+              newCount.should.be.equal(oldCount);
+              done();
+            });
+          });
+      });
+    });
+    it('fails due to invalid password', done => {
+      User.count().then(oldCount => {
+        chai
+          .request(server)
+          .post('/admin/users')
+          .send({
+            firstName: 'firstName',
+            lastName: 'lastName',
+            username: 'username',
+            password: 'pass',
+            email: 'email1@wolox.com.ar'
+          })
+          .catch(err => {
+            err.should.have.status(422);
+            err.response.should.be.json;
+            err.response.body.should.have.property('message');
+            err.response.body.should.have.property('internal_code');
+            User.count().then(newCount => {
+              newCount.should.be.equal(oldCount);
+              done();
+            });
+          });
+      });
+    });
+
+    it('tries to update previous user with no password', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(existingUser => {
+          User.count().then(oldCount => {
+            chai
+              .request(server)
+              .post('/admin/users')
+              .send({
+                firstName: 'firstName',
+                lastName: 'lastName',
+                username: 'username',
+                password: 'passwordWrong',
+                email: 'email1@wolox.com.ar'
+              })
+              .catch(err => {
+                err.should.have.status(400);
+                User.count().then(newCount => {
+                  newCount.should.be.equal(oldCount);
+                  done();
+                });
+              });
+          });
+        });
+    });
+  });
+
   describe('/users GET', () => {
     it('lists users correctly', done => {
       const user = {
