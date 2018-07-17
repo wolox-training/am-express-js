@@ -109,20 +109,18 @@ exports.signUp = (req, res, next) => {
 };
 
 exports.listUsers = (req, res, next) => {
-  User.count().then(total => {
-    if (req.query.page < 1 || req.query.limit < 1) return next(errors.parametersInvalid);
-    User.getUsers(req.query.page, req.query.limit)
-      .then(users => {
-        res.status(200).send({
-          users,
-          page: req.query.page ? req.query.page : 1,
-          totalPages: Math.ceil(total / (req.query.limit ? req.query.limit : 10)),
-          totalUsers: total
-        });
-      })
-      .catch(err => {
-        logger.error('Error looking for users in the database');
-        next(err);
+  if (req.query.page < 1 || req.query.limit < 1) return next(errors.parametersInvalid);
+  User.getUsers(req.query.page, req.query.limit)
+    .then(users => {
+      res.status(200).send({
+        users: users.rows,
+        page: req.query.page ? req.query.page : 1,
+        totalPages: Math.ceil(users.count / (req.query.limit ? req.query.limit : 10)),
+        totalUsers: users.count
       });
-  });
+    })
+    .catch(err => {
+      logger.error('Error looking for users in the database');
+      next(err);
+    });
 };

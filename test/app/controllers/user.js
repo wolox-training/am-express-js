@@ -1,11 +1,11 @@
 const chai = require('chai'),
-  server = require('./../app'),
+  server = require('./../../../app'),
   dictum = require('dictum.js'),
   should = chai.should(),
   bcrypt = require('bcryptjs'),
-  sessionsManager = require('./../app/services/sessionsManager'),
-  errors = require('./../app/errors'),
-  User = require('./../app/models').user;
+  sessionsManager = require('./../../../app/services/sessionsManager'),
+  errors = require('./../../../app/errors'),
+  User = require('./../../../app/models').user;
 
 const saltRounds = 10;
 
