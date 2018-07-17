@@ -1,3 +1,1 @@
-exports.createUser = () => {
-
-};
+exports.createUser = () => {};

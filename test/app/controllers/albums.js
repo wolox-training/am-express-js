@@ -51,7 +51,7 @@ beforeEach(() => {
 
 describe('albums controller', () => {
   describe('/users/:userId/albums GET', () => {
-    it.only('shows bought albums', done => {
+    it('shows bought albums', done => {
       const user = {
         firstName: 'firstName',
         lastName: 'lastName',
@@ -261,7 +261,7 @@ describe('albums controller', () => {
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .then(res => {
                   res.should.have.status(200);
-                  res.body.should.have.lengthOf(1);
+                  res.body.albums.should.have.lengthOf(1);
                   res.should.be.json;
                   dictum.chai(res, 'Returns all albums');
                   done();

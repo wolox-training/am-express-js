@@ -25,8 +25,7 @@ exports.buyAlbum = (req, res, next) => {
     userId: req.user.id,
     albumId: req.params.id
   };
-  return Album
-    .createModel(sale)
+  return Album.createModel(sale)
     .then(newSale => {
       res.status(201).send({ sale: newSale });
     })
@@ -36,8 +35,7 @@ exports.buyAlbum = (req, res, next) => {
 };
 
 exports.showAlbumsBought = (req, res, next) => {
-  return Album
-    .findAll({ where: { userId: req.user.id } })
+  return Album.findAll({ where: { userId: req.user.id } })
     .then(purchases => {
       const promises = purchases.map(element => {
         return albumFetcher.getAlbumById(element.albumId);
