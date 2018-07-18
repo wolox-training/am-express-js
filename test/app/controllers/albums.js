@@ -73,30 +73,31 @@ describe('albums controller', () => {
           };
           albums.createModel(sale).then(firstSale => {
             sale.albumId = 2;
-            albums.createModel(sale).then(s => {
-              chai
-                .request(server)
-                .post('/users/sessions')
-                .send({
-                  email: 'email1@wolox.com.ar',
-                  password: 'password'
-                })
-                .then(auth => {
-                  chai
-                    .request(server)
-                    .get('/users/1/albums')
-                    .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
-                    .then(res => {
-                      res.should.have.status(200);
-                      done();
-                    });
-                });
+            albums.createModel(sale).then(secondSale => {
+              albums.count().then(oldCount => {
+                chai
+                  .request(server)
+                  .post('/users/sessions')
+                  .send({
+                    email: 'email1@wolox.com.ar',
+                    password: 'password'
+                  })
+                  .then(auth => {
+                    chai
+                      .request(server)
+                      .get('/users/1/albums')
+                      .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                      .then(res => {
+                        res.should.have.status(200);
+                        res.body.albums.should.have.lengthOf(oldCount);
+                        done();
+                      });
+                  });
+              });
             });
           });
         });
     });
-
-
 
     it('denies invalid user id', done => {
       const user = {
