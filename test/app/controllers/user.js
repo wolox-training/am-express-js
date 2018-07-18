@@ -10,7 +10,7 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 describe('users controller', () => {
-  describe('/admin/users POST', () => {
+  describe.only('/admin/users POST', () => {
     it('creates a new admin', done => {
       User.count().then(oldCount => {
         chai
@@ -25,8 +25,7 @@ describe('users controller', () => {
           })
           .then(res => {
             res.should.have.status(201);
-            res.body.should.have.property('newAdmin');
-            res.body.newAdmin.should.have.property('created_at');
+            res.body.should.have.property('user');
             User.count().then(newCount => {
               newCount.should.be.equal(oldCount + 1);
               dictum.chai(res, 'Creates a new admin');
