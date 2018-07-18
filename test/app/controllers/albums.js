@@ -87,8 +87,56 @@ describe('albums controller', () => {
                     .get('/users/1/albums')
                     .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                     .then(res => {
-                      console.log(res.body);
                       res.should.have.status(200);
+                      done();
+                    });
+                });
+            });
+          });
+        });
+    });
+
+
+
+    it('denies invalid user id', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          const sale = {
+            userId: 1,
+            albumId: 1
+          };
+          albums.createModel(sale).then(firstSale => {
+            sale.albumId = 2;
+            albums.createModel(sale).then(s => {
+              chai
+                .request(server)
+                .post('/users/sessions')
+                .send({
+                  email: 'email1@wolox.com.ar',
+                  password: 'password'
+                })
+                .then(auth => {
+                  chai
+                    .request(server)
+                    .get('/users/1000/albums')
+                    .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                    .catch(error => {
+                      error.should.have.status(400);
+                      error.response.body.should.have.property('message');
+                      error.response.body.should.have.property('internal_code');
                       done();
                     });
                 });

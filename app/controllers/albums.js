@@ -40,9 +40,8 @@ exports.showAlbumsBought = (req, res, next) => {
       const promises = purchases.map(element => {
         return albumFetcher.getAlbumById(element.albumId);
       });
-      console.log(promises);
       return Promise.all(promises).then(albumsBought => {
-        console.log(albumsBought);
+        logger.info('Showed album photos correctly');
         res.status(200);
         res.send({ albums: albumsBought });
       });
