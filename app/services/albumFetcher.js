@@ -16,3 +16,8 @@ exports.getAlbumById = albumId => {
   const url = `${config.common.albumList}/albums/${albumId}`;
   return axios.get(url).then(response => response.data);
 };
+
+exports.getAlbumPhotoById = albumId => {
+  const url = `${config.common.albumList}/albums/${albumId}/photos`;
+  return axios.get(url).then(response => response.data);
+};

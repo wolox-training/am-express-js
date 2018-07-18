@@ -40,9 +40,23 @@ exports.showAlbumsBought = (req, res, next) => {
       const promises = purchases.map(element => {
         return albumFetcher.getAlbumById(element.albumId);
       });
-      console.log(promises);
       return Promise.all(promises).then(albumsBought => {
-        console.log(albumsBought);
+        res.status(200);
+        res.send({ albums: albumsBought });
+      });
+    })
+    .catch(error => {
+      next(error);
+    });
+};
+
+exports.showAlbumPhotos = (req, res, next) => {
+  return Album.findAll({ where: { userId: req.user.id } })
+    .then(purchases => {
+      const promises = purchases.map(element => {
+        return albumFetcher.getAlbumPhotoById(element.albumId);
+      });
+      return Promise.all(promises).then(albumsBought => {
         res.status(200);
         res.send({ albums: albumsBought });
       });
