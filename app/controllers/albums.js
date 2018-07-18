@@ -57,6 +57,7 @@ exports.showAlbumPhotos = (req, res, next) => {
         return albumFetcher.getAlbumPhotoById(element.albumId);
       });
       return Promise.all(promises).then(albumsBought => {
+        logger.info('Showed album photos correctly');
         res.status(200);
         res.send({ albums: albumsBought });
       });
