@@ -82,6 +82,7 @@ exports.signIn = (req, res, next) => {
             email: user.email,
             id: user.id,
             exp: {
+              time: timeOfLogin.getTime(),
               date: timeOfLogin.getDate(),
               hours: timeOfLogin.getHours(),
               minutes: timeOfLogin.getMinutes()
