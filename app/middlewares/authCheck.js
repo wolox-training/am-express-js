@@ -7,7 +7,6 @@ exports.checkUser = (req, res, next) => {
   const auth = req.headers.authorization; // auth is in base64(username:password)  so we need to decode the base64
   try {
     const decoded = sessionsManager.decode(auth);
-    console.log(decoded);
     const currentTime = new time.Date();
     const diff =
       currentTime.getHours() * 60 + currentTime.getMinutes() - decoded.exp.hours * 60 - decoded.exp.minutes;
