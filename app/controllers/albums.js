@@ -13,9 +13,11 @@ exports.listAlbums = (req, res, next) => {
   albumFetcher
     .listAlbums(albumsList)
     .then(albums => {
+      logger.info('Showed albums list')
       res.status(200).send({ albums });
     })
     .catch(error => {
+      logger.error('Could not find list of albums bought');
       next(error);
     });
 };
@@ -27,9 +29,11 @@ exports.buyAlbum = (req, res, next) => {
   };
   return Album.createModel(sale)
     .then(newSale => {
+      logger.info('User bought new album');
       res.status(201).send({ sale: newSale });
     })
     .catch(err => {
+      logger.error('Could not buy album');
       next(err);
     });
 };
@@ -41,11 +45,13 @@ exports.showAlbumsBought = (req, res, next) => {
         return albumFetcher.getAlbumById(element.albumId);
       });
       return Promise.all(promises).then(albumsBought => {
+        logger.info('Showed list of albums bought by user');
         res.status(200);
         res.send({ albums: albumsBought });
       });
     })
     .catch(error => {
+      logger.error('Could not find list of albums bought');
       next(error);
     });
 };
@@ -63,6 +69,7 @@ exports.showAlbumPhotos = (req, res, next) => {
       });
     })
     .catch(error => {
+      logger.error('Could not find list of albums photos');
       next(error);
     });
 };
