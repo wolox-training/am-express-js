@@ -2,22 +2,18 @@ const errors = require('../errors'),
   config = require('../../config'),
   logger = require('../logger'),
   axios = require('axios'),
+  albumFetcher = require('../services/albumFetcher.js'),
   sessionsManager = require('../services/sessionsManager.js');
 
 exports.checkValidAlbumId = (req, res, next) => {
-  const url = `${config.common.albumList}/albums/${req.params.id}`;
-  return axios
-    .get(url)
+  return albumFetcher
+    .getAlbumById(req.params.id)
     .then(json => {
-      console.log(url);
-      console.log(json.status);
-      logger.info('User requested albums and received album list');
-      req.albumList = json.data;
+      logger.info('User requested albums and received album');
+      req.album = json.data;
       next();
     })
     .catch(error => {
-      console.log(url);
-      console.log(error.status);
-      next(errors.parametersInvalid);
+      next(errors.albumNotExists);
     });
 };
