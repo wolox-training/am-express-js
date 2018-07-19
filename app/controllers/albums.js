@@ -13,7 +13,7 @@ exports.listAlbums = (req, res, next) => {
   albumFetcher
     .listAlbums(albumsList)
     .then(albums => {
-      logger.info('Showed albums list')
+      logger.info('Showed albums list');
       res.status(200).send({ albums });
     })
     .catch(error => {
