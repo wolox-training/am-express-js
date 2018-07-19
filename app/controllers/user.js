@@ -16,7 +16,7 @@ const passwordValid = password => {
   return isAlphanumeric.test(password) && password.length >= 8;
 };
 
-const generateUser = (user, next) => {
+const generateUser = user => {
   if (!emailValid(user.email)) {
     logger.error(`Email: ${user.email} invalid.`);
     throw errors.emailNotValid(user.email);
@@ -28,7 +28,7 @@ const generateUser = (user, next) => {
   logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
   return bcrypt.hash(user.password, saltRounds).then(hash => {
     user.password = hash;
-    return User.createModel(user, next);
+    return User.createModel(user);
   });
 };
 const giveAdminPrivileges = userParams => {

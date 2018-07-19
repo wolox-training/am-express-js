@@ -30,3 +30,6 @@ exports.unauthorizedNoLogin = internalError('Must be logged in to access', expor
 exports.ALREADY_BOUGHT = 'user_already_bought_album';
 exports.alreadyBought = (email, albumId) =>
   internalError(`User: ${email} already bought ${albumId}`, exports.ALREADY_BOUGHT);
+
+exports.ALBUM_NOT_EXISTS = 'album_not_found';
+exports.albumNotExists = internalError('Album does not exists', exports.ALBUM_NOT_EXISTS);

@@ -3,7 +3,7 @@ const logger = require('../logger'),
 
 module.exports = (sequelize, DataTypes) => {
   const album = sequelize.define(
-    'albums',
+    'album',
     {
       userId: {
         type: DataTypes.INTEGER,
