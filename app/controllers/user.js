@@ -7,6 +7,7 @@ const bcrypt = require('bcryptjs'),
   errors = require('../errors');
 
 const saltRounds = 10;
+let tokenSerial = 1;
 
 const emailValid = email => {
   const re = /\S+@wolox.com.ar/;
@@ -72,6 +73,13 @@ exports.adminSignUp = (req, res, next) => {
     });
 };
 
+exports.expireAllUsers = (req, res, next) => {
+  tokenSerial = new time.Date();
+  tokenSerial = tokenSerial.getTime();
+  sessionsManager.validFrom = tokenSerial;
+  res.status(200).send();
+};
+
 exports.signIn = (req, res, next) => {
   return User.getUserByEmail(req.body.email).then(user => {
     if (user) {
@@ -82,6 +90,7 @@ exports.signIn = (req, res, next) => {
             email: user.email,
             id: user.id,
             exp: {
+              time: timeOfLogin.getTime(),
               date: timeOfLogin.getDate(),
               hours: timeOfLogin.getHours(),
               minutes: timeOfLogin.getMinutes()

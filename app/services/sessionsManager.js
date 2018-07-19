@@ -5,6 +5,8 @@ const SECRET = config.common.session.secret;
 
 exports.HEADER_NAME = config.common.session.header_name;
 
+exports.validFrom = 0;
+
 exports.encode = token => {
   return jwt.encode(token, SECRET);
 };

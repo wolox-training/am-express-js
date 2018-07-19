@@ -10,6 +10,52 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 describe('users controller', () => {
+  describe('/users/sessions/invalidate_all POST', () => {
+    it('Session should be expired', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          chai
+            .request(server)
+            .post('/users/sessions')
+            .send({
+              email: 'email1@wolox.com.ar',
+              password: 'password'
+            })
+            .then(auth => {
+              chai
+                .request(server)
+                .post('/users/sessions/invalidate_all')
+                .then(loggedOut => {
+                  chai
+                    .request(server)
+                    .get('/users?page=1&limit=3')
+                    .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                    .catch(error => {
+                      error.should.have.status(403);
+                      error.response.should.be.json;
+                      error.response.body.should.have.property('message');
+                      error.response.body.should.have.property('internal_code');
+                      done();
+                    });
+                });
+            });
+        });
+    });
+  });
+
   describe('/admin/users POST', () => {
     it('creates a new admin', done => {
       User.count().then(oldCount => {
