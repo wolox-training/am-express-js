@@ -72,7 +72,7 @@ beforeEach(() => {
 });
 
 describe('albums controller', () => {
-  describe('/users/:userId/albums/photos GET', () => {
+  describe('/users/albums/:id/photos GET', () => {
     it('shows bought albums photos', done => {
       const user = {
         firstName: 'firstName',
@@ -107,11 +107,11 @@ describe('albums controller', () => {
                   .then(auth => {
                     chai
                       .request(server)
-                      .get('/users/1/albums/photos')
+                      .get('/users/albums/1/photos')
                       .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                       .then(res => {
                         res.should.have.status(200);
-                        res.body.albums.should.have.lengthOf(oldCount);
+                        res.body.albums.should.have.lengthOf(oldCount - 1);
                         dictum.chai(res, 'Shows bought albums photos');
                         done();
                       });
