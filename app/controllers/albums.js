@@ -1,5 +1,5 @@
 const User = require('../models').user,
-  Album = require('../models').albums,
+  Album = require('../models').album,
   logger = require('../logger'),
   config = require('../../config'),
   fetch = require('node-fetch'),
@@ -9,12 +9,10 @@ const User = require('../models').user,
   errors = require('../errors');
 
 exports.listAlbums = (req, res, next) => {
-  const albumsList = [];
   albumFetcher
-    .listAlbums(albumsList)
-    .then(albums => {
-      logger.info('Showed albums list');
-      res.status(200).send({ albums });
+    .listAlbums()
+    .then(albumList => {
+      res.status(200).send({ albums: albumList });
     })
     .catch(error => {
       logger.error('Could not find list of albums bought');

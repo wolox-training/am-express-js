@@ -16,11 +16,10 @@ exports.checkUser = (req, res, next) => {
 exports.checkValidUserId = (req, res, next) => {
   return User.findOne({ where: { id: req.params.user_id } })
     .then(user => {
-      if (user) {
-        req.user = user;
+      if (user && user.id === req.user.id) {
         next();
       } else {
-        throw errors.parametersInvalid;
+        next(errors.parametersInvalid);
       }
     })
     .catch(error => {
