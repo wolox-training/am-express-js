@@ -8,12 +8,15 @@ const chai = require('chai'),
   simple = require('simple-mock'),
   nock = require('nock'),
   fetch = require('node-fetch'),
+  MockDate = require('mockdate'),
   albums = require('./../../../app/models').albums,
   User = require('./../../../app/models').user;
 
 const saltRounds = 10;
 
 beforeEach(() => {
+  MockDate.reset();
+
   nock('https://jsonplaceholder.typicode.com')
     .get('/albums')
     .reply(200, [
@@ -393,7 +396,7 @@ describe('albums controller', () => {
         });
     });
 
-    it.only('denies access to list albums to expired token ', done => {
+    it('denies access to list albums to expired token ', done => {
       const user = {
         firstName: 'firstName',
         lastName: 'lastName',
@@ -416,13 +419,15 @@ describe('albums controller', () => {
               password: 'password'
             })
             .then(auth => {
+              MockDate.set('1/1/2100');
               chai
                 .request(server)
                 .get('/albums')
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .catch(error => {
                   error.should.have.status(403);
-                  error.should.be.json;
+                  error.response.body.should.have.property('message');
+                  error.response.body.should.have.property('internal_code');
                   done();
                 });
             });
