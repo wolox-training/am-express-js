@@ -57,16 +57,15 @@ exports.showAlbumsBought = (req, res, next) => {
 };
 
 exports.showAlbumPhotos = (req, res, next) => {
-  return Album.findAll({ where: { userId: req.user.id, albumId: req.params.id } })
-    .then(purchases => {
-      const promises = purchases.map(element => {
-        return albumFetcher.getAlbumPhotoById(element.albumId);
-      });
-      return Promise.all(promises).then(albumsBought => {
-        logger.info('Showed album photos correctly');
-        res.status(200);
-        res.send({ albums: albumsBought });
-      });
+  return Album.findOne({ where: { userId: req.user.id, albumId: req.params.id } })
+    .then(album => {
+      if (album) {
+        return albumFetcher.getAlbumPhotoById(req.params.id).then(photos => {
+          logger.info('Showed list of photos');
+          res.status(200);
+          res.send({ photos });
+        });
+      }
     })
     .catch(error => {
       logger.error('Could not find list of albums photos');

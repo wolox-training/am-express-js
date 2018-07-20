@@ -114,7 +114,7 @@ describe('albums controller', () => {
                       .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                       .then(res => {
                         res.should.have.status(200);
-                        res.body.albums.should.have.lengthOf(oldCount - 1);
+                        res.body.photos.should.have.lengthOf(oldCount - 1);
                         dictum.chai(res, 'Shows bought albums photos');
                         done();
                       });
