@@ -3,14 +3,16 @@ const errors = require('../errors'),
   time = require('time'),
   sessionsManager = require('../services/sessionsManager.js');
 
+const MILISECONDS_PER_MINUTE = 60000;
+
 exports.checkUser = (req, res, next) => {
   const auth = req.headers.authorization; // auth is in base64(username:password)  so we need to decode the base64
   try {
     const decoded = sessionsManager.decode(auth);
     const currentTime = new time.Date();
-    const diff =
-      currentTime.getHours() * 60 + currentTime.getMinutes() - decoded.exp.hours * 60 - decoded.exp.minutes;
-    if (diff > 5 || decoded.exp.time < sessionsManager.validFrom) throw errors.expiredSession;
+    const minutesSinceLogin = Math.floor((currentTime.getTime() - decoded.exp.time) / MILISECONDS_PER_MINUTE);
+
+    if (minutesSinceLogin > 1) throw errors.expiredSession;
     req.user = decoded;
     next();
   } catch (e) {

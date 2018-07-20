@@ -57,7 +57,7 @@ exports.showAlbumsBought = (req, res, next) => {
 };
 
 exports.showAlbumPhotos = (req, res, next) => {
-  return Album.findAll({ where: { userId: req.user.id } })
+  return Album.findAll({ where: { userId: req.user.id, albumId: req.params.id } })
     .then(purchases => {
       const promises = purchases.map(element => {
         return albumFetcher.getAlbumPhotoById(element.albumId);
