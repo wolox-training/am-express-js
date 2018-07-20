@@ -452,6 +452,7 @@ describe('users controller', () => {
           .catch(err => {
             err.response.should.be.json;
             err.response.body.should.have.property('message');
+
             err.should.have.status(400);
             err.response.body.should.have.property('internal_code');
             User.count().then(newCount => {

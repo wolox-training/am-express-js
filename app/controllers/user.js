@@ -16,7 +16,7 @@ const passwordValid = password => {
   return isAlphanumeric.test(password) && password.length >= 8;
 };
 
-const generateUser = (user, next) => {
+const generateUser = user => {
   if (!emailValid(user.email)) {
     logger.error(`Email: ${user.email} invalid.`);
     throw errors.emailNotValid(user.email);
@@ -75,7 +75,7 @@ exports.signIn = (req, res, next) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password).then(isValid => {
         if (isValid) {
-          const auth = sessionsManager.encode({ email: user.email });
+          const auth = sessionsManager.encode({ email: user.email, id: user.id });
           res.status(200);
           res.set(sessionsManager.HEADER_NAME, auth);
           res.send(user);
@@ -98,7 +98,7 @@ exports.signUp = (req, res, next) => {
     password: req.body.password,
     admin: false
   };
-  generateUser(user, next)
+  return generateUser(user, next)
     .then(auxUser => {
       res.status(201).send({ user: auxUser });
     })

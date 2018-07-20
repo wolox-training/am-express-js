@@ -18,11 +18,18 @@ exports.passwordInvalid = internalError('Password invalid', exports.PASSWORD_NOT
 exports.PARAMETERS_INVALID = 'parameters_invalid';
 exports.parametersInvalid = internalError('Parameters incomplete or invalid', exports.PARAMETERS_INVALID);
 
-exports.INCORRECT_CREDENTIALS = 'Incorrect credentials';
+exports.INCORRECT_CREDENTIALS = 'incorrect_credentials';
 exports.incorrectCredentials = internalError(
   'The credentials are unrecognized',
   exports.INCORRECT_CREDENTIALS
 );
 
-exports.UNAUTHORIZED_NO_LOGIN = 'Not logged in';
+exports.UNAUTHORIZED_NO_LOGIN = 'not_logged_in';
 exports.unauthorizedNoLogin = internalError('Must be logged in to access', exports.UNAUTHORIZED_NO_LOGIN);
+
+exports.ALREADY_BOUGHT = 'user_already_bought_album';
+exports.alreadyBought = (email, albumId) =>
+  internalError(`User: ${email} already bought ${albumId}`, exports.ALREADY_BOUGHT);
+
+exports.ALBUM_NOT_EXISTS = 'album_not_found';
+exports.albumNotExists = internalError('Album does not exists', exports.ALBUM_NOT_EXISTS);

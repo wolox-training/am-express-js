@@ -1,4 +1,5 @@
 const User = require('../models').user,
+  albums = require('../models').album,
   logger = require('../logger'),
   config = require('../../config'),
   fetch = require('node-fetch'),
@@ -15,5 +16,20 @@ exports.listAlbums = (req, res, next) => {
     })
     .catch(error => {
       next(error);
+    });
+};
+
+exports.buyAlbum = (req, res, next) => {
+  const sale = {
+    userId: req.user.id,
+    albumId: req.params.id
+  };
+  return albums
+    .createModel(sale)
+    .then(newSale => {
+      res.status(201).send({ sale: newSale });
+    })
+    .catch(err => {
+      next(err);
     });
 };
