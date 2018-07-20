@@ -76,8 +76,8 @@ exports.adminSignUp = (req, res, next) => {
 exports.expireAllUsers = (req, res, next) => {
   tokenSerial = new time.Date();
   tokenSerial = tokenSerial.getTime();
-  sessionsManager.validFrom = tokenSerial;
-  res.status(200).send();
+  sessionsManager.blackList.push({ userEmail: req.user.email, limit: tokenSerial });
+  res.status(200).send(sessionsManager.blackList);
 };
 
 exports.signIn = (req, res, next) => {
@@ -86,6 +86,8 @@ exports.signIn = (req, res, next) => {
       bcrypt.compare(req.body.password, user.password).then(isValid => {
         if (isValid) {
           const timeOfLogin = new Date();
+          console.log('Time: ');
+          console.log(timeOfLogin.getTime());
           const auth = sessionsManager.encode({
             email: user.email,
             id: user.id,

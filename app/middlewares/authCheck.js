@@ -11,7 +11,9 @@ exports.checkUser = (req, res, next) => {
     const decoded = sessionsManager.decode(auth);
     const currentTime = new Date();
     const minutesSinceLogin = Math.floor((currentTime.getTime() - decoded.exp.time) / MILISECONDS_PER_MINUTE);
-    if (minutesSinceLogin > 1) throw errors.expiredSession;
+    console.log(sessionsManager.blacklisted(decoded.email));
+    if (minutesSinceLogin > 10 || sessionsManager.blacklisted(decoded.email, decoded.exp.time))
+      throw errors.expiredSession;
     req.user = decoded;
     next();
   } catch (e) {
