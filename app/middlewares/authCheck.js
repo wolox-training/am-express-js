@@ -1,4 +1,5 @@
 const errors = require('../errors'),
+  User = require('../models').user,
   sessionsManager = require('../services/sessionsManager.js');
 
 exports.checkUser = (req, res, next) => {
@@ -10,4 +11,18 @@ exports.checkUser = (req, res, next) => {
   } catch (e) {
     next(errors.unauthorizedNoLogin);
   }
+};
+
+exports.checkValidUserId = (req, res, next) => {
+  return User.findOne({ where: { id: req.params.user_id } })
+    .then(user => {
+      if (user && user.id === req.user.id) {
+        next();
+      } else {
+        next(errors.parametersInvalid);
+      }
+    })
+    .catch(error => {
+      next(error);
+    });
 };

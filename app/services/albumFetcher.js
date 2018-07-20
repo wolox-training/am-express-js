@@ -9,9 +9,12 @@ const User = require('../models').user,
 
 exports.listAlbums = () => {
   const url = `${config.common.albumList}/albums`;
-  return axios.get(url).then(response => {
-    return response.data;
-  });
+  return axios.get(url).then(response => response.data);
+};
+
+exports.getAlbumById = albumId => {
+  const url = `${config.common.albumList}/albums/${albumId}`;
+  return axios.get(url).then(response => response.data);
 };
 
 exports.getAlbumById = albumId => {

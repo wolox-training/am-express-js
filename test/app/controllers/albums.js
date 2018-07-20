@@ -35,11 +35,118 @@ beforeEach(() => {
     ]);
 
   nock('https://jsonplaceholder.typicode.com')
+    .get('/albums/2')
+    .reply(200, [
+      {
+        userId: 1,
+        id: 2,
+        title: 'sunt qui excepturi placeat culpa'
+      }
+    ]);
+
+  nock('https://jsonplaceholder.typicode.com')
     .get('/albums/1000')
     .reply(404, []);
 });
 
 describe('albums controller', () => {
+  describe('/users/:userId/albums GET', () => {
+    it('shows bought albums', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          const sale = {
+            userId: 1,
+            albumId: 1
+          };
+          albums.createModel(sale).then(firstSale => {
+            sale.albumId = 2;
+            albums.createModel(sale).then(secondSale => {
+              albums.count().then(oldCount => {
+                chai
+                  .request(server)
+                  .post('/users/sessions')
+                  .send({
+                    email: 'email1@wolox.com.ar',
+                    password: 'password'
+                  })
+                  .then(auth => {
+                    chai
+                      .request(server)
+                      .get('/users/1/albums')
+                      .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                      .then(res => {
+                        res.should.have.status(200);
+                        res.body.albums.should.have.lengthOf(oldCount);
+                        done();
+                      });
+                  });
+              });
+            });
+          });
+        });
+    });
+
+    it('denies invalid user id', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          const sale = {
+            userId: 1,
+            albumId: 1
+          };
+          albums.createModel(sale).then(firstSale => {
+            sale.albumId = 2;
+            albums.createModel(sale).then(s => {
+              chai
+                .request(server)
+                .post('/users/sessions')
+                .send({
+                  email: 'email1@wolox.com.ar',
+                  password: 'password'
+                })
+                .then(auth => {
+                  chai
+                    .request(server)
+                    .get('/users/1000/albums')
+                    .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                    .catch(error => {
+                      error.should.have.status(400);
+                      error.response.body.should.have.property('message');
+                      error.response.body.should.have.property('internal_code');
+                      done();
+                    });
+                });
+            });
+          });
+        });
+    });
+  });
+
   describe('/albums/:id POST', () => {
     it('buys album correctly', done => {
       const user = {
@@ -203,7 +310,7 @@ describe('albums controller', () => {
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .then(res => {
                   res.should.have.status(200);
-                  res.body.should.have.lengthOf(1);
+                  res.body.albums.should.have.lengthOf(1);
                   res.should.be.json;
                   dictum.chai(res, 'Returns all albums');
                   done();
