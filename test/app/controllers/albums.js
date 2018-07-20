@@ -15,6 +15,8 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 beforeEach(() => {
+  MockDate.reset();
+
   nock('https://jsonplaceholder.typicode.com')
     .get('/albums')
     .reply(200, [
@@ -422,9 +424,10 @@ describe('albums controller', () => {
                 .request(server)
                 .get('/albums')
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
-                .then(error => {
-                  error.should.have.status(200);
-                  error.should.be.json;
+                .catch(error => {
+                  error.should.have.status(403);
+                  error.response.body.should.have.property('message');
+                  error.response.body.should.have.property('internal_code');
                   done();
                 });
             });

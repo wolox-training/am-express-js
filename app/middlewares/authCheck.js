@@ -9,11 +9,8 @@ exports.checkUser = (req, res, next) => {
   const auth = req.headers.authorization; // auth is in base64(username:password)  so we need to decode the base64
   try {
     const decoded = sessionsManager.decode(auth);
-    const currentTime = new time.Date();
+    const currentTime = new Date();
     const minutesSinceLogin = Math.floor((currentTime.getTime() - decoded.exp.time) / MILISECONDS_PER_MINUTE);
-    console.log('sdasdasdasd\n\n');
-    console.log(`currentTime: ${currentTime.getTime()}`);
-    console.log(`login: ${decoded.exp.time}`);
     if (minutesSinceLogin > 1) throw errors.expiredSession;
     req.user = decoded;
     next();

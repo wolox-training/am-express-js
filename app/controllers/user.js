@@ -85,7 +85,7 @@ exports.signIn = (req, res, next) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password).then(isValid => {
         if (isValid) {
-          const timeOfLogin = new time.Date();
+          const timeOfLogin = new Date();
           const auth = sessionsManager.encode({
             email: user.email,
             id: user.id,
