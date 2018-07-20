@@ -5,11 +5,7 @@ const userController = require('./controllers/user'),
 
 exports.init = app => {
   app.get('/users', [authCheck.checkUser], userController.listUsers);
-  app.get(
-    '/users/:user_id/albums/photos',
-    [authCheck.checkUser, authCheck.checkValidUserId],
-    albumController.showAlbumPhotos
-  );
+  app.get('/users/albums/:id/photos', [authCheck.checkUser], albumController.showAlbumPhotos);
   app.get('/albums', [authCheck.checkUser], albumController.listAlbums);
   app.get(
     '/users/:user_id/albums',

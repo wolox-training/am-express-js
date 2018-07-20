@@ -8,6 +8,7 @@ const chai = require('chai'),
   simple = require('simple-mock'),
   nock = require('nock'),
   fetch = require('node-fetch'),
+  MockDate = require('mockdate'),
   albums = require('./../../../app/models').albums,
   User = require('./../../../app/models').user;
 
@@ -72,7 +73,7 @@ beforeEach(() => {
 });
 
 describe('albums controller', () => {
-  describe('/users/:userId/albums/photos GET', () => {
+  describe('/users/albums/:id/photos GET', () => {
     it('shows bought albums photos', done => {
       const user = {
         firstName: 'firstName',
@@ -107,11 +108,11 @@ describe('albums controller', () => {
                   .then(auth => {
                     chai
                       .request(server)
-                      .get('/users/1/albums/photos')
+                      .get('/users/albums/1/photos')
                       .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                       .then(res => {
                         res.should.have.status(200);
-                        res.body.albums.should.have.lengthOf(oldCount);
+                        res.body.albums.should.have.lengthOf(oldCount - 1);
                         dictum.chai(res, 'Shows bought albums photos');
                         done();
                       });
@@ -387,6 +388,43 @@ describe('albums controller', () => {
                   res.body.albums.should.have.lengthOf(1);
                   res.should.be.json;
                   dictum.chai(res, 'Returns all albums');
+                  done();
+                });
+            });
+        });
+    });
+
+    it('denies access to list albums to expired token ', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          chai
+            .request(server)
+            .post('/users/sessions')
+            .send({
+              email: 'email1@wolox.com.ar',
+              password: 'password'
+            })
+            .then(auth => {
+              MockDate.set('1/1/2100');
+              chai
+                .request(server)
+                .get('/albums')
+                .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                .then(error => {
+                  error.should.have.status(200);
+                  error.should.be.json;
                   done();
                 });
             });
