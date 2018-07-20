@@ -1,5 +1,5 @@
 const User = require('../models').user,
-  albums = require('../models').albums,
+  albums = require('../models').album,
   logger = require('../logger'),
   config = require('../../config'),
   fetch = require('node-fetch'),

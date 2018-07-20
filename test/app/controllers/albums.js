@@ -9,7 +9,7 @@ const chai = require('chai'),
   nock = require('nock'),
   fetch = require('node-fetch'),
   MockDate = require('mockdate'),
-  albums = require('./../../../app/models').albums,
+  albums = require('./../../../app/models').album,
   User = require('./../../../app/models').user;
 
 const saltRounds = 10;
@@ -292,7 +292,7 @@ describe('albums controller', () => {
                 .post('/albums/1000')
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .catch(error => {
-                  error.should.have.status(400);
+                  error.should.have.status(404);
                   error.response.body.should.have.property('message');
                   error.response.body.should.have.property('internal_code');
                   done();

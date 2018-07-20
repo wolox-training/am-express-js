@@ -33,3 +33,6 @@ exports.alreadyBought = (email, albumId) =>
 
 exports.EXPIRED_SESSION = 'user_session_expired';
 exports.expiredSession = internalError(`User session expired`, exports.EXPIRED_SESSION);
+
+exports.ALBUM_NOT_EXISTS = 'album_not_found';
+exports.albumNotExists = internalError('Album does not exists', exports.ALBUM_NOT_EXISTS);
