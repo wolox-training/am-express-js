@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs'),
   User = require('../models').user,
   date = require('date-and-time'),
   time = require('time'),
+  moment = require('moment'),
   logger = require('../logger'),
   sessionsManager = require('../services/sessionsManager'),
   errors = require('../errors');
@@ -77,16 +78,11 @@ exports.signIn = (req, res, next) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password).then(isValid => {
         if (isValid) {
-          const timeOfLogin = new Date();
+          const timeOfLogin = moment();
           const auth = sessionsManager.encode({
             email: user.email,
             id: user.id,
-            exp: {
-              time: timeOfLogin.getTime(),
-              date: timeOfLogin.getDate(),
-              hours: timeOfLogin.getHours(),
-              minutes: timeOfLogin.getMinutes()
-            }
+            exp: timeOfLogin
           });
           res.status(200);
           res.set(sessionsManager.HEADER_NAME, auth);

@@ -9,9 +9,8 @@ const User = require('../models').user,
   errors = require('../errors');
 
 exports.listAlbums = (req, res, next) => {
-  const albumsList = [];
   albumFetcher
-    .listAlbums(albumsList)
+    .listAlbums()
     .then(albums => {
       logger.info('Showed albums list');
       res.status(200).send({ albums });

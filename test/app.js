@@ -3,6 +3,7 @@
 const fs = require('fs'),
   path = require('path'),
   chai = require('chai'),
+  MockDate = require('mockdate'),
   chaiHttp = require('chai-http'),
   models = require('../app/models'),
   dataCreation = require('../scripts/dataCreation');
@@ -10,6 +11,10 @@ const fs = require('fs'),
 chai.use(chaiHttp);
 
 const getTablesQuery = `SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE';`;
+
+beforeEach('reset date in case of test mocking date', () => {
+  MockDate.reset();
+});
 
 // THIS WORKS ONLY WITH POSTGRESQL
 beforeEach('drop tables, re-create them and populate sample data', done => {

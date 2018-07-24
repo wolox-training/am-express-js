@@ -1,21 +1,19 @@
 const errors = require('../errors'),
   User = require('../models').user,
-  time = require('time'),
+  config = require('../../config'),
+  moment = require('moment'),
   sessionsManager = require('../services/sessionsManager.js');
-
-const MILISECONDS_PER_MINUTE = 60000;
 
 exports.checkUser = (req, res, next) => {
   const auth = req.headers.authorization; // auth is in base64(username:password)  so we need to decode the base64
   try {
     const decoded = sessionsManager.decode(auth);
-    const currentTime = new Date();
-    const minutesSinceLogin = Math.floor((currentTime.getTime() - decoded.exp.time) / MILISECONDS_PER_MINUTE);
-    if (minutesSinceLogin > 1) throw errors.expiredSession;
+    const validFrom = moment().subtract(config.common.daySessionIsValid, 'day');
+    if (moment(decoded.exp) < validFrom) next(errors.expiredSession);
     req.user = decoded;
     next();
   } catch (e) {
-    next(errors.expiredSession);
+    next(errors.unauthorizedNoLogin);
   }
 };
 

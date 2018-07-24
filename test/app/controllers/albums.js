@@ -3,6 +3,7 @@ const chai = require('chai'),
   dictum = require('dictum.js'),
   should = chai.should(),
   bcrypt = require('bcryptjs'),
+  moment = require('moment'),
   sessionsManager = require('./../../../app/services/sessionsManager'),
   errors = require('./../../../app/errors'),
   simple = require('simple-mock'),
@@ -15,8 +16,6 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 beforeEach(() => {
-  MockDate.reset();
-
   nock('https://jsonplaceholder.typicode.com')
     .get('/albums')
     .reply(200, [
@@ -419,7 +418,11 @@ describe('albums controller', () => {
               password: 'password'
             })
             .then(auth => {
-              MockDate.set('1/1/2100');
+              MockDate.set(
+                moment()
+                  .add(2, 'day')
+                  .format()
+              );
               chai
                 .request(server)
                 .get('/albums')
