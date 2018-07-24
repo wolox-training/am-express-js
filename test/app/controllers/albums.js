@@ -3,20 +3,19 @@ const chai = require('chai'),
   dictum = require('dictum.js'),
   should = chai.should(),
   bcrypt = require('bcryptjs'),
+  moment = require('moment'),
   sessionsManager = require('./../../../app/services/sessionsManager'),
   errors = require('./../../../app/errors'),
   simple = require('simple-mock'),
   nock = require('nock'),
   fetch = require('node-fetch'),
   MockDate = require('mockdate'),
-  albums = require('./../../../app/models').albums,
+  albums = require('./../../../app/models').album,
   User = require('./../../../app/models').user;
 
 const saltRounds = 10;
 
 beforeEach(() => {
-  MockDate.reset();
-
   nock('https://jsonplaceholder.typicode.com')
     .get('/albums')
     .reply(200, [
@@ -114,7 +113,7 @@ describe('albums controller', () => {
                       .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                       .then(res => {
                         res.should.have.status(200);
-                        res.body.albums.should.have.lengthOf(oldCount - 1);
+                        res.body.photos.should.have.lengthOf(oldCount - 1);
                         dictum.chai(res, 'Shows bought albums photos');
                         done();
                       });
@@ -292,7 +291,7 @@ describe('albums controller', () => {
                 .post('/albums/1000')
                 .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
                 .catch(error => {
-                  error.should.have.status(400);
+                  error.should.have.status(404);
                   error.response.body.should.have.property('message');
                   error.response.body.should.have.property('internal_code');
                   done();
@@ -419,7 +418,11 @@ describe('albums controller', () => {
               password: 'password'
             })
             .then(auth => {
-              MockDate.set('1/1/2100');
+              MockDate.set(
+                moment()
+                  .add(2, 'day')
+                  .format()
+              );
               chai
                 .request(server)
                 .get('/albums')

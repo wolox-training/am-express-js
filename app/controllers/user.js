@@ -2,12 +2,21 @@ const bcrypt = require('bcryptjs'),
   User = require('../models').user,
   date = require('date-and-time'),
   time = require('time'),
+  moment = require('moment'),
   logger = require('../logger'),
   sessionsManager = require('../services/sessionsManager'),
   errors = require('../errors');
 
 const saltRounds = 10;
-let tokenSerial = 1;
+
+const makeid = () => {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < 5; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+};
 
 const emailValid = email => {
   const re = /\S+@wolox.com.ar/;
@@ -19,7 +28,7 @@ const passwordValid = password => {
   return isAlphanumeric.test(password) && password.length >= 8;
 };
 
-const generateUser = (user, next) => {
+const generateUser = user => {
   if (!emailValid(user.email)) {
     logger.error(`Email: ${user.email} invalid.`);
     throw errors.emailNotValid(user.email);
@@ -31,7 +40,7 @@ const generateUser = (user, next) => {
   logger.info(`All validations passed, going to create the user: ${JSON.stringify(user)}`);
   return bcrypt.hash(user.password, saltRounds).then(hash => {
     user.password = hash;
-    return User.createModel(user, next);
+    return User.createModel(user);
   });
 };
 const giveAdminPrivileges = userParams => {
@@ -44,7 +53,8 @@ exports.adminSignUp = (req, res, next) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
-    admin: true
+    admin: true,
+    validFor: makeid()
   };
   return User.getUserByEmail(req.body.email)
     .then(existingUser => {
@@ -74,10 +84,14 @@ exports.adminSignUp = (req, res, next) => {
 };
 
 exports.expireAllUsers = (req, res, next) => {
-  tokenSerial = new time.Date();
-  tokenSerial = tokenSerial.getTime();
-  sessionsManager.blackList.push({ userEmail: req.user.email, limit: tokenSerial });
-  res.status(200).send(sessionsManager.blackList);
+  User.update({ validFor: makeid() }, { returning: true, where: { email: req.user.email } })
+    .then(dateSet => {
+      res.status(200).send(dateSet);
+    })
+    .catch(error => {
+      logger.error('Update failed');
+      next(error);
+    });
 };
 
 exports.signIn = (req, res, next) => {
@@ -85,18 +99,12 @@ exports.signIn = (req, res, next) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password).then(isValid => {
         if (isValid) {
-          const timeOfLogin = new Date();
-          console.log('Time: ');
-          console.log(timeOfLogin.getTime());
+          const timeOfLogin = moment();
           const auth = sessionsManager.encode({
             email: user.email,
             id: user.id,
-            exp: {
-              time: timeOfLogin.getTime(),
-              date: timeOfLogin.getDate(),
-              hours: timeOfLogin.getHours(),
-              minutes: timeOfLogin.getMinutes()
-            }
+            exp: timeOfLogin,
+            serial: user.validFor
           });
           res.status(200);
           res.set(sessionsManager.HEADER_NAME, auth);
@@ -118,7 +126,8 @@ exports.signUp = (req, res, next) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
-    admin: false
+    admin: false,
+    validFor: makeid()
   };
   return generateUser(user, next)
     .then(auxUser => {
