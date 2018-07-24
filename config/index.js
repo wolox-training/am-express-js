@@ -46,7 +46,7 @@ const config = {
       secret: process.env.NODE_API_SESSION_SECRET
     },
     albumList: process.env.ALBUM_LIST_URL,
-    daySessionIsValid: process.env.DAYS_UNTIL_EXPIRED,
+    daySessionIsValid: process.env.DAYS_UNTIL_EXPIRED || 1,
     rollbar: {
       accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
       environment: process.env.ROLLBAR_ENV
