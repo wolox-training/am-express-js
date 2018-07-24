@@ -16,6 +16,8 @@ const chai = require('chai'),
 const saltRounds = 10;
 
 beforeEach(() => {
+  MockDate.reset();
+
   nock('https://jsonplaceholder.typicode.com')
     .get('/albums')
     .reply(200, [
