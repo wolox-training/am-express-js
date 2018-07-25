@@ -9,15 +9,6 @@ const bcrypt = require('bcryptjs'),
 
 const saltRounds = 10;
 
-const makeid = () => {
-  let text = '';
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (let i = 0; i < 5; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
-};
-
 const emailValid = email => {
   const re = /\S+@wolox.com.ar/;
   return re.test(email);
@@ -54,7 +45,7 @@ exports.adminSignUp = (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     admin: true,
-    validFor: makeid()
+    validFor: sessionsManager.makeid()
   };
   return User.getUserByEmail(req.body.email)
     .then(existingUser => {
@@ -84,9 +75,9 @@ exports.adminSignUp = (req, res, next) => {
 };
 
 exports.expireAllUsers = (req, res, next) => {
-  User.update({ validFor: makeid() }, { returning: true, where: { email: req.user.email } })
+  User.update({ validFor: sessionsManager.makeid() }, { returning: true, where: { email: req.user.email } })
     .then(dateSet => {
-      res.status(200).send(dateSet);
+      res.status(200).send();
     })
     .catch(error => {
       logger.error('Update failed');
@@ -127,7 +118,7 @@ exports.signUp = (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     admin: false,
-    validFor: makeid()
+    validFor: sessionsManager.makeid()
   };
   return generateUser(user, next)
     .then(auxUser => {

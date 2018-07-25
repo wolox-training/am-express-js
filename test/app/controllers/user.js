@@ -8,9 +8,7 @@ const chai = require('chai'),
   User = require('./../../../app/models').user;
 
 const saltRounds = 10;
-beforeEach(() => {
-  sessionsManager.blackList = [];
-});
+
 describe('users controller', () => {
   describe('/users/sessions/invalidate_all POST', () => {
     it('Session should be blacklisted', done => {
