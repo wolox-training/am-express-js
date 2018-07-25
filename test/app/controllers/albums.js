@@ -35,6 +35,17 @@ beforeEach(() => {
     ]);
 
   nock('https://jsonplaceholder.typicode.com')
+    .get('/albums/1/photos')
+    .reply(200, [
+      {
+        userId: 1,
+        id: 1,
+        title: 'quidem molestiae enim',
+        url: 'serele'
+      }
+    ]);
+
+  nock('https://jsonplaceholder.typicode.com')
     .get('/albums/2')
     .reply(200, [
       {
@@ -45,11 +56,73 @@ beforeEach(() => {
     ]);
 
   nock('https://jsonplaceholder.typicode.com')
+    .get('/albums/2/photos')
+    .reply(200, [
+      {
+        userId: 1,
+        id: 2,
+        title: 'sunt qui excepturi placeat culpa',
+        url: 'sarasa'
+      }
+    ]);
+
+  nock('https://jsonplaceholder.typicode.com')
     .get('/albums/1000')
     .reply(404, []);
 });
 
 describe('albums controller', () => {
+  describe('/users/albums/:id/photos GET', () => {
+    it('shows bought albums photos', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          const sale = {
+            userId: 1,
+            albumId: 1
+          };
+          albums.createModel(sale).then(firstSale => {
+            sale.albumId = 2;
+            albums.createModel(sale).then(secondSale => {
+              albums.count().then(oldCount => {
+                chai
+                  .request(server)
+                  .post('/users/sessions')
+                  .send({
+                    email: 'email1@wolox.com.ar',
+                    password: 'password'
+                  })
+                  .then(auth => {
+                    chai
+                      .request(server)
+                      .get('/users/albums/1/photos')
+                      .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                      .then(res => {
+                        res.should.have.status(200);
+                        res.body.photos.should.have.lengthOf(oldCount - 1);
+                        dictum.chai(res, 'Shows bought albums photos');
+                        done();
+                      });
+                  });
+              });
+            });
+          });
+        });
+    });
+  });
+
   describe('/users/:userId/albums GET', () => {
     it('shows bought albums', done => {
       const user = {
@@ -90,6 +163,7 @@ describe('albums controller', () => {
                       .then(res => {
                         res.should.have.status(200);
                         res.body.albums.should.have.lengthOf(oldCount);
+                        dictum.chai(res, 'Shows bought albums');
                         done();
                       });
                   });

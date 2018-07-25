@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   album.createModel = sale => {
     return album.findOne({ where: { userId: sale.userId, albumId: sale.albumId } }).then(alreadyBought => {
       if (alreadyBought) {
+        logger.error('User already bought this album');
         throw errors.alreadyBought(sale.userId, sale.albumId);
       } else {
         return album.create(sale);
