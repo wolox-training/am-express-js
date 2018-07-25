@@ -3,17 +3,21 @@ const chai = require('chai'),
   dictum = require('dictum.js'),
   should = chai.should(),
   bcrypt = require('bcryptjs'),
+  moment = require('moment'),
   sessionsManager = require('./../../../app/services/sessionsManager'),
   errors = require('./../../../app/errors'),
   simple = require('simple-mock'),
   nock = require('nock'),
   fetch = require('node-fetch'),
+  MockDate = require('mockdate'),
   albums = require('./../../../app/models').album,
   User = require('./../../../app/models').user;
 
 const saltRounds = 10;
 
 beforeEach(() => {
+  MockDate.reset();
+
   nock('https://jsonplaceholder.typicode.com')
     .get('/albums')
     .reply(200, [
@@ -387,6 +391,48 @@ describe('albums controller', () => {
                   res.body.albums.should.have.lengthOf(1);
                   res.should.be.json;
                   dictum.chai(res, 'Returns all albums');
+                  done();
+                });
+            });
+        });
+    });
+
+    it('denies access to list albums to expired token ', done => {
+      const user = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        username: 'username',
+        password: 'password',
+        email: 'email1@wolox.com.ar'
+      };
+      bcrypt
+        .hash(user.password, saltRounds)
+        .then(hash => {
+          user.password = hash;
+          return User.createModel(user);
+        })
+        .then(u => {
+          chai
+            .request(server)
+            .post('/users/sessions')
+            .send({
+              email: 'email1@wolox.com.ar',
+              password: 'password'
+            })
+            .then(auth => {
+              MockDate.set(
+                moment()
+                  .add(2, 'day')
+                  .format()
+              );
+              chai
+                .request(server)
+                .get('/albums')
+                .set(sessionsManager.HEADER_NAME, auth.headers[sessionsManager.HEADER_NAME])
+                .catch(error => {
+                  error.should.have.status(403);
+                  error.response.body.should.have.property('message');
+                  error.response.body.should.have.property('internal_code');
                   done();
                 });
             });

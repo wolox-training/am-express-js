@@ -12,6 +12,7 @@ const statusCodes = {
   [errors.ALBUM_NOT_EXISTS]: 404,
   [errors.PARAMETERS_INVALID]: 400,
   [errors.INCORRECT_CREDENTIALS]: 400,
+  [errors.EXPIRED_SESSION]: 403,
   [errors.UNAUTHORIZED_NO_LOGIN]: 403
 };
 
