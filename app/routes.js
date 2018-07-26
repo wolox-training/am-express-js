@@ -13,6 +13,7 @@ exports.init = app => {
     albumController.showAlbumsBought
   );
   app.post('/albums/:id', [authCheck.checkUser, albumFetcher.checkValidAlbumId], albumController.buyAlbum);
+  app.post('/users/sessions/invalidate_all', [authCheck.checkUser], userController.expireAllUsers);
   app.post('/users', [], userController.signUp);
   app.post('/users/sessions', [], userController.signIn);
   app.post('/admin/users', [], userController.adminSignUp);

@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       admin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+      },
+      validFor: {
+        type: DataTypes.STRING,
+        field: 'valid_for'
       }
     },
     {

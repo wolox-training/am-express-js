@@ -9,9 +9,16 @@ exports.checkUser = (req, res, next) => {
   try {
     const decoded = sessionsManager.decode(auth);
     const validFrom = moment().subtract(config.common.daySessionIsValid, 'day');
-    if (moment(decoded.exp) < validFrom) next(errors.expiredSession);
-    req.user = decoded;
-    next();
+    return sessionsManager
+      .blacklisted(decoded.email, decoded.serial)
+      .then(BLUser => {
+        if (moment(decoded.exp) < validFrom || BLUser) {
+          return next(errors.expiredSession);
+        }
+        req.user = decoded;
+        next();
+      })
+      .catch(error => next(error));
   } catch (e) {
     next(errors.unauthorizedNoLogin);
   }

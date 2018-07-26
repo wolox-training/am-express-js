@@ -44,7 +44,8 @@ exports.adminSignUp = (req, res, next) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
-    admin: true
+    admin: true,
+    validFor: sessionsManager.makeid()
   };
   return User.getUserByEmail(req.body.email)
     .then(existingUser => {
@@ -73,6 +74,17 @@ exports.adminSignUp = (req, res, next) => {
     });
 };
 
+exports.expireAllUsers = (req, res, next) => {
+  User.update({ validFor: sessionsManager.makeid() }, { returning: true, where: { email: req.user.email } })
+    .then(dateSet => {
+      res.status(200).send();
+    })
+    .catch(error => {
+      logger.error('Update failed');
+      next(error);
+    });
+};
+
 exports.signIn = (req, res, next) => {
   return User.getUserByEmail(req.body.email).then(user => {
     if (user) {
@@ -82,7 +94,8 @@ exports.signIn = (req, res, next) => {
           const auth = sessionsManager.encode({
             email: user.email,
             id: user.id,
-            exp: timeOfLogin
+            exp: timeOfLogin,
+            serial: user.validFor
           });
           res.status(200);
           res.set(sessionsManager.HEADER_NAME, auth);
@@ -104,7 +117,8 @@ exports.signUp = (req, res, next) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
-    admin: false
+    admin: false,
+    validFor: sessionsManager.makeid()
   };
   return generateUser(user, next)
     .then(auxUser => {
